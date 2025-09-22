@@ -94,9 +94,11 @@ export function FeaturedProducts() {
                   
                   {/* Quick Add to Cart */}
                   <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button variant="cta" size="sm" className="w-full">
-                      <ShoppingCart className="h-4 w-4" />
-                      Quick Add
+                    <Button variant="cta" size="sm" className="w-full" asChild>
+                      <a href="/product/1">
+                        <ShoppingCart className="h-4 w-4" />
+                        Quick Add
+                      </a>
                     </Button>
                   </div>
                 </div>
