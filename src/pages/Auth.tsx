@@ -114,6 +114,13 @@ export default function Auth() {
 
         {/* Logo */}
         <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/src/assets/logo.png" 
+              alt="M Nas Online Mart" 
+              className="w-20 h-20 rounded-full object-cover border-4 border-primary/20"
+            />
+          </div>
           <div className="text-3xl font-bold gradient-primary bg-clip-text text-transparent mb-2">
             M Nas Online Mart
           </div>

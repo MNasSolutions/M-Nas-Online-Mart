@@ -1,8 +1,53 @@
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleNewsletterSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-newsletter-email', {
+        body: { email }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Subscribed Successfully!",
+        description: "Check your email for confirmation and welcome message.",
+      });
+      
+      setEmail("");
+    } catch (error: any) {
+      console.error('Newsletter signup error:', error);
+      toast({
+        title: "Subscription Failed",
+        description: "Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <footer className="bg-muted/50 border-t">
       <div className="container mx-auto px-4 py-16">
@@ -10,24 +55,32 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="text-2xl font-bold gradient-primary bg-clip-text text-transparent">
-              ShopHub
+              M Nas Online Mart
             </div>
             <p className="text-muted-foreground text-sm">
               Your trusted partner for premium products and exceptional shopping experience. 
               We deliver quality and value to customers worldwide.
             </p>
             <div className="flex space-x-4">
-              <Button variant="ghost" size="icon" className="hover:text-primary">
-                <Facebook className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                  <Facebook className="h-4 w-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="hover:text-primary">
-                <Twitter className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                  <Twitter className="h-4 w-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="hover:text-primary">
-                <Instagram className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="h-4 w-4" />
+                </a>
               </Button>
-              <Button variant="ghost" size="icon" className="hover:text-primary">
-                <Youtube className="h-4 w-4" />
+              <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                  <Youtube className="h-4 w-4" />
+                </a>
               </Button>
             </div>
           </div>
@@ -62,26 +115,43 @@ export function Footer() {
             <p className="text-muted-foreground text-sm">
               Subscribe to get updates on new products and exclusive offers.
             </p>
-            <div className="space-y-2">
-              <Input placeholder="Enter your email" className="bg-background" />
-              <Button variant="cta" className="w-full">
-                Subscribe
+            <form onSubmit={handleNewsletterSignup} className="space-y-2">
+              <Input 
+                type="email"
+                placeholder="Enter your email" 
+                className="bg-background"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <Button 
+                type="submit" 
+                variant="cta" 
+                className="w-full"
+                disabled={loading}
+              >
+                {loading ? "Subscribing..." : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" />
+                    Subscribe
+                  </>
+                )}
               </Button>
-            </div>
+            </form>
             
             {/* Contact Info */}
             <div className="space-y-2 pt-4">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>support@shophub.com</span>
+                <span>mnas@onlinemart.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Phone className="h-4 w-4" />
-                <span>+1 (555) 123-4567</span>
+                <span>+234 706 903 6157</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
-                <span>123 Commerce St, NY</span>
+                <span>Nigeria</span>
               </div>
             </div>
           </div>
@@ -90,7 +160,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-muted-foreground text-sm">
-            © 2024 ShopHub. All rights reserved.
+            © 2024 M Nas Online Mart. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm text-muted-foreground">
             <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
