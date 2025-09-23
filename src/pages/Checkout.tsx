@@ -300,7 +300,53 @@ export default function Checkout() {
                   <CreditCard className="h-5 w-5 mr-2" />
                   Payment Method
                 </h2>
+                
+                {/* Bank Transfer Options */}
+                <div className="mb-6 space-y-4">
+                  <h3 className="text-lg font-medium">Bank Transfer Details</h3>
+                  
+                  {/* Moniepoint Details */}
+                  <div className="bg-muted p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2 text-primary">Moniepoint Microfinance Bank</h4>
+                    <div className="space-y-1 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Account Name:</span>
+                        <span className="font-medium">Muhammad Ahmad Saad</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Account Number:</span>
+                        <span className="font-medium">7069036157</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Opay Details */}
+                  <div className="bg-muted p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2 text-primary">Opay</h4>
+                    <div className="space-y-1 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Account Name:</span>
+                        <span className="font-medium">Abubakar Ahmad Saad</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Account Number:</span>
+                        <span className="font-medium">7069036157</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Alert>
+                    <AlertDescription>
+                      After making payment, please confirm via WhatsApp and provide your transaction receipt.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+
+                <Separator className="my-6" />
+
+                {/* Card Payment Option */}
                 <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Or Pay with Card</h3>
                   <div>
                     <Label htmlFor="cardName">Name on Card *</Label>
                     <Input
