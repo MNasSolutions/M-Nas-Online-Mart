@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -46,15 +47,15 @@ export default function Auth() {
           password,
         });
 
-        if (error) {
-          setError(error.message);
-        } else {
-          toast({
-            title: "Welcome back!",
-            description: "You have successfully logged in.",
-          });
-          navigate("/");
-        }
+          if (error) {
+            setError(error.message);
+          } else {
+            toast({
+              title: "Welcome back!",
+              description: "You have successfully logged in.",
+            });
+            navigate(isAdminLogin ? "/admin" : "/");
+          }
       } else {
         const redirectUrl = `${window.location.origin}/`;
         
@@ -186,6 +187,22 @@ export default function Auth() {
               </div>
             )}
 
+            {/* Admin Login Toggle */}
+            {isLogin && (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="adminLogin"
+                  checked={isAdminLogin}
+                  onChange={(e) => setIsAdminLogin(e.target.checked)}
+                  className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
+                />
+                <Label htmlFor="adminLogin" className="text-sm">
+                  Login as Administrator
+                </Label>
+              </div>
+            )}
+
             {/* Error Message */}
             {error && (
               <Alert variant="destructive">
@@ -226,6 +243,7 @@ export default function Auth() {
               variant="link"
               onClick={() => {
                 setIsLogin(!isLogin);
+                setIsAdminLogin(false);
                 setError("");
                 setPassword("");
                 setConfirmPassword("");
@@ -234,6 +252,30 @@ export default function Auth() {
             >
               {isLogin ? "Sign Up" : "Sign In"}
             </Button>
+          </div>
+        </div>
+
+        {/* Moniepoint Account Details */}
+        <div className="mt-8 bg-card rounded-2xl shadow-strong p-6 border">
+          <h3 className="text-lg font-semibold mb-4 text-center">Payment Information</h3>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Bank:</span>
+              <span className="font-medium">Moniepoint Microfinance Bank</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Account Name:</span>
+              <span className="font-medium">M Nas Online Mart</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Account Number:</span>
+              <span className="font-medium">5029683574</span>
+            </div>
+            <div className="mt-4 p-3 bg-muted rounded-lg">
+              <p className="text-xs text-muted-foreground text-center">
+                Transfer to this account for order payments and confirm via WhatsApp
+              </p>
+            </div>
           </div>
         </div>
       </div>
