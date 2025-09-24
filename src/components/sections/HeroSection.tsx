@@ -27,11 +27,13 @@ export function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="xl" className="group">
-                Shop Now
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <Button variant="hero" size="xl" className="group" asChild>
+                <a href="/products">
+                  Shop Now
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
-              <Button variant="outline" size="xl" className="group">
+              <Button variant="outline" size="xl" className="group" onClick={() => window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')}>
                 <Play className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 Watch Demo
               </Button>

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useSearch } from "@/hooks/useSearch";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,6 +32,7 @@ export function Header() {
   const { user, signOut } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { searchQuery, setSearchQuery, handleSearch } = useSearch();
 
   const handleLogout = async () => {
     try {
@@ -71,21 +73,21 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors font-medium">
+            <Link to="/" className="text-foreground hover:text-primary transition-colors font-medium">
               Home
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/products?category=electronics" className="text-muted-foreground hover:text-primary transition-colors">
               Electronics
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/products?category=fashion" className="text-muted-foreground hover:text-primary transition-colors">
               Fashion
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/products?category=home" className="text-muted-foreground hover:text-primary transition-colors">
               Home & Living
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/products?category=sports" className="text-muted-foreground hover:text-primary transition-colors">
               Sports
-            </a>
+            </Link>
           </nav>
 
           {/* Search Bar */}
@@ -95,6 +97,9 @@ export function Header() {
               <Input 
                 placeholder="Search products..." 
                 className="pl-10 bg-muted/50 border-0 focus:bg-background"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
               />
             </div>
           </div>
@@ -170,6 +175,9 @@ export function Header() {
             <Input 
               placeholder="Search products..." 
               className="pl-10 bg-muted/50 border-0"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
             />
           </div>
         </div>
@@ -177,21 +185,21 @@ export function Header() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden pb-4 space-y-2 animate-fade-in">
-            <a href="#" className="block py-2 px-4 rounded-md text-foreground hover:bg-accent font-medium">
+            <Link to="/" className="block py-2 px-4 rounded-md text-foreground hover:bg-accent font-medium">
               Home
-            </a>
-            <a href="#" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
+            </Link>
+            <Link to="/products?category=electronics" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
               Electronics
-            </a>
-            <a href="#" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
+            </Link>
+            <Link to="/products?category=fashion" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
               Fashion
-            </a>
-            <a href="#" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
+            </Link>
+            <Link to="/products?category=home" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
               Home & Living
-            </a>
-            <a href="#" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
+            </Link>
+            <Link to="/products?category=sports" className="block py-2 px-4 rounded-md text-muted-foreground hover:bg-accent">
               Sports
-            </a>
+            </Link>
           </div>
         )}
       </div>

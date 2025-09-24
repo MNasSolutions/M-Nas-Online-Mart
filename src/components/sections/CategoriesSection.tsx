@@ -56,9 +56,10 @@ export function CategoriesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
-            <div 
+            <a 
               key={category.id}
-              className="group cursor-pointer animate-fade-in"
+              href={`/products?category=${category.name.toLowerCase().replace(' & ', '-').replace(' ', '-')}`}
+              className="group cursor-pointer animate-fade-in block"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="bg-card rounded-2xl p-8 text-center hover-lift shadow-soft hover:shadow-medium transition-all duration-300 border border-border/50">
@@ -82,7 +83,7 @@ export function CategoriesSection() {
                   {category.itemCount}
                 </div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

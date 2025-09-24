@@ -1,5 +1,7 @@
 import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 // Mock product data
 const products = [
@@ -50,6 +52,28 @@ const products = [
 ];
 
 export function FeaturedProducts() {
+  const { toast } = useToast();
+
+  const handleAddToCart = (productName: string) => {
+    toast({
+      title: "Added to Cart",
+      description: `${productName} has been added to your cart.`,
+    });
+  };
+
+  const handleBuyNow = (productName: string) => {
+    toast({
+      title: "Buy Now",
+      description: `Redirecting to checkout for ${productName}...`,
+    });
+  };
+
+  const handleWishlist = (productName: string) => {
+    toast({
+      title: "Added to Wishlist",
+      description: `${productName} has been added to your wishlist.`,
+    });
+  };
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -85,20 +109,36 @@ export function FeaturedProducts() {
                     </div>
                   )}
                   
-                  {/* Action Buttons */}
-                  <div className="absolute top-3 right-3 space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button size="icon" variant="ghost" className="bg-white/90 hover:bg-white">
+                  {/* Wishlist Button */}
+                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="bg-white/90 hover:bg-white"
+                      onClick={() => handleWishlist(product.name)}
+                    >
                       <Heart className="h-4 w-4" />
                     </Button>
                   </div>
                   
-                  {/* Quick Add to Cart */}
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <Button variant="cta" size="sm" className="w-full" asChild>
-                      <a href="/product/1">
-                        <ShoppingCart className="h-4 w-4" />
-                        Quick Add
-                      </a>
+                  {/* Action Buttons */}
+                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
+                    <Button 
+                      variant="cta" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => handleBuyNow(product.name)}
+                    >
+                      Buy Now
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 bg-white/90 hover:bg-white"
+                      onClick={() => handleAddToCart(product.name)}
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-1" />
+                      Add
                     </Button>
                   </div>
                 </div>
@@ -142,8 +182,10 @@ export function FeaturedProducts() {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            View All Products
+          <Button variant="outline" size="lg" asChild>
+            <Link to="/products">
+              View All Products
+            </Link>
           </Button>
         </div>
       </div>
