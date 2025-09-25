@@ -10,8 +10,7 @@ import { Link } from "react-router-dom";
 const wishlistItems = [
   {
     id: 1,
-    name: "Premium Wireless Headphones",
-    price: 299.99,
+    name: "Premium Wireless Headphones"
     originalPrice: 399.99,
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
     rating: 4.8,
