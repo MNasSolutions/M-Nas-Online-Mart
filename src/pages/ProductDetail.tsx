@@ -11,15 +11,15 @@ import { useNavigate } from "react-router-dom";
 // Mock product data
 const product = {
   id: 1,
-  name: "Rechargeable Light",
+  name: "Premium Wireless Headphones",
   price: 299.99,
   originalPrice: 399.99,
   rating: 4.8,
   reviews: 156,
   stock: 15,
   images: [
-    "IMG-20241130-WA0025.jpg,
-    "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80",
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80",
+    "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&q=80",
     "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80"
   ],
   description: "Experience crystal-clear audio with our premium wireless headphones. Features active noise cancellation, 30-hour battery life, and premium comfort padding.",
