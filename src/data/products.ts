@@ -16,12 +16,12 @@ export const products: Product[] = [
   // Electronics
   {
     id: 1,
-    name: "Wireless Pro Headphones",
+    name: "Power Bank",
     price: 299.99,
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "assets//IMG-20241130-WA0025.jpg",
+    image: "assets/data/IMG-20241130-WA0025.jpg",
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
