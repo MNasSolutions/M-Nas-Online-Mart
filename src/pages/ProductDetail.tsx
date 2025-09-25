@@ -19,7 +19,7 @@ const product = {
   stock: 15,
   images: [
     "IMG-20241130-WA0025.jpg,
-    "IMG-20241130-WA0036.jpg",
+    "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80",
     "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80"
   ],
   description: "Experience crystal-clear audio with our premium wireless headphones. Features active noise cancellation, 30-hour battery life, and premium comfort padding.",
