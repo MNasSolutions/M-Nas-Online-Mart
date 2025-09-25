@@ -10,10 +10,10 @@ import { Link } from "react-router-dom";
 const wishlistItems = [
   {
     id: 1,
-    name: "Premium Wireless Headphones",
+    name: "Rechargeable Light",
     price: 299.99,
     originalPrice: 399.99,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
+    image: "assets/IMG-20241130-WA0025.jpg",
     rating: 4.8,
     reviews: 256,
     inStock: true
