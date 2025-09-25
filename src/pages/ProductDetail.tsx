@@ -18,7 +18,7 @@ const product = {
   reviews: 156,
   stock: 15,
   images: [
-    "assets//IMG-20241130-WA0025.jpg",
+    "IMG-20241130-WA0025.jpg",
     "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&q=80",
     "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80"
   ],
