@@ -21,7 +21,7 @@ export const products: Product[] = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
+    image: "IMG-20241130-WA0025.jpg",
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
