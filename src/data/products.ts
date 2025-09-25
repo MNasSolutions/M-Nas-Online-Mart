@@ -16,7 +16,7 @@ export const products: Product[] = [
   // Electronics
   {
     id: 1,
-    name: "Power Bank",
+    name: "Wireless Pro Headphonesd",
     price: 299.99,
     originalPrice: 399.99,
     rating: 4.8,
