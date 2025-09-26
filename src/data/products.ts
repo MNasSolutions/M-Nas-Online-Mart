@@ -21,7 +21,7 @@ export const products: Product[] = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "https://unsplash.com/photos/a-white-and-blue-case-sitting-on-top-of-a-white-table-RIOptBd-1H8",
+    image: "https://unsplash.com/photos/red-leather-case-on-black-surface-QsVafcI4ouo",
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
