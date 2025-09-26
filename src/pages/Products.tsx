@@ -6,7 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { products, getProductsByCategory, searchProducts, Product } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
-import mnas from "@/assets/IMG-20241130-WA0025.jpg";
+import mnas from "@/assets/2.jpg";
 
 const categories = [
   { id: 'all', name: 'All Products', count: products.length },
