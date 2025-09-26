@@ -21,7 +21,7 @@ export const products: Product[] = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "https://scontent-los2-1.xx.fbcdn.net/v/t45.5328-4/530526850_785988884110857_8879533796287368731_n.jpg?stp=c0.34.206.206a_dst-jpg_p206x206_tt6&_nc_cat=110&ccb=1-7&_nc_sid=247b10&_nc_eui2=AeG8afJRHcv8EITbIK-tiDHu8PIXG3lubGfw8hcbeW5sZ2JepPCyBsrVZCEe3BxJi_sRbDmTFnug1xCiiU97CcBh&_nc_ohc=5dqIy2akYmkQ7kNvwFsbp9K&_nc_oc=AdnajhTq0fKq0vUURLoty3_YZ7LxDabwq2GJAETS0hipevHi3ZkxsX_VPE0iDMvhmjk&_nc_zt=23&_nc_ht=scontent-los2-1.xx&_nc_gid=vJzTrk-UDX-XlTqZMX_Fow&oh=00_AfajAqA3OTGrORMQH_Pe14GYfsIxL6fkHcbre6k65mT2wg&oe=68DC8F85",
+    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
