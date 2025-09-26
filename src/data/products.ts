@@ -1,4 +1,4 @@
-import {mnas} from "@/assets/2.jpg";
+import {mnas} from "assets/2.jpg";
 
 export interface Product {
   id: number;
