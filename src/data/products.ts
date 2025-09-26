@@ -1,4 +1,4 @@
-import mnas from "@/assets/2.jpg";
+import mnas from "assets/2.jpg";
 
 export interface Product {
   id: number;
@@ -35,7 +35,7 @@ export const products: Product[] = [
     price: 199.99,
     rating: 4.9,
     reviews: 89,
-    image: "@/assets/2.jpg",
+    image: "assets/2.jpg",
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
