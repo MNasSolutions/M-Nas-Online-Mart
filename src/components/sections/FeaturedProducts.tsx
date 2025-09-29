@@ -13,7 +13,7 @@ const products = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "mnas",
+    image: "assets/2.jpg",
     badge: "Best Seller",
     badgeColor: "bg-primary"
   },
