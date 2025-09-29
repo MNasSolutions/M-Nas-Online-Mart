@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 const products = [
   {
     id: 1,
-    name: "Wireless Pro Headphones",
+    name: "Power Bank",
     price: 299.99,
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80",
+    image: "assets/2.jpg",
     badge: "Best Seller",
     badgeColor: "bg-primary"
   },
