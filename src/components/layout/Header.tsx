@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "@/hooks/useSearch";
@@ -30,6 +31,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const { user, signOut } = useAuth();
+  const { cartCount } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { searchQuery, setSearchQuery, handleSearch } = useSearch();
@@ -112,9 +114,11 @@ export function Header() {
             <Link to="/cart">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-secondary text-secondary-foreground text-xs flex items-center justify-center">
-                  3
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-secondary text-secondary-foreground text-xs flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </Button>
             </Link>
             
@@ -131,15 +135,15 @@ export function Header() {
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/account" className="cursor-pointer">
+                    <Link to="/profile" className="cursor-pointer">
                       <User className="h-4 w-4 mr-2" />
-                      My Account
+                      My Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/account/orders" className="cursor-pointer">
+                    <Link to="/track-order" className="cursor-pointer">
                       <ShoppingCart className="h-4 w-4 mr-2" />
-                      My Orders
+                      Track Order
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

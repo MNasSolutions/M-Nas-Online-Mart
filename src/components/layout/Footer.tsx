@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, Send } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -89,11 +90,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">FAQ</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Shipping Info</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Return Policy</a></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
+              <li><Link to="/shipping" className="text-muted-foreground hover:text-primary transition-colors">Shipping Info</Link></li>
+              <li><Link to="/returns" className="text-muted-foreground hover:text-primary transition-colors">Return Policy</Link></li>
             </ul>
           </div>
 
@@ -101,11 +102,11 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Categories</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Electronics</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Fashion</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Home & Living</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Sports</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Books</a></li>
+              <li><Link to="/products?category=electronics" className="text-muted-foreground hover:text-primary transition-colors">Electronics</Link></li>
+              <li><Link to="/products?category=fashion" className="text-muted-foreground hover:text-primary transition-colors">Fashion</Link></li>
+              <li><Link to="/products?category=home" className="text-muted-foreground hover:text-primary transition-colors">Home & Living</Link></li>
+              <li><Link to="/products?category=sports" className="text-muted-foreground hover:text-primary transition-colors">Sports</Link></li>
+              <li><Link to="/track-order" className="text-muted-foreground hover:text-primary transition-colors">Track Order</Link></li>
             </ul>
           </div>
 
@@ -143,11 +144,11 @@ export function Footer() {
             <div className="space-y-2 pt-4">
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>mnas@onlinemart.com</span>
+                <span>mnassolutions007@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                <Phone className="h-4 w-4" />
-                <span>+234 706 903 6157</span>
+                <Mail className="h-4 w-4" />
+                <span>mnassolutions@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4" />
