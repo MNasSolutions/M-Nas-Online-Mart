@@ -2,7 +2,7 @@ import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-import mnas from "@/assets/2.jpg";
+import { products } from "@/data/productData";
 
 // Mock product data
 const products = [
@@ -13,7 +13,7 @@ const products = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "assets/2.jpg",
+    image: products,
     badge: "Best Seller",
     badgeColor: "bg-primary"
   },
