@@ -1,4 +1,4 @@
-import productImage from "@/src/assets/data/2.jpg";
+import productImage from "@/assets/data/2.jpg";
 
 export interface Product {
   id: number;
@@ -23,7 +23,7 @@ export const products: Product[] = [
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: "productImage",
+    image: productImage,
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
