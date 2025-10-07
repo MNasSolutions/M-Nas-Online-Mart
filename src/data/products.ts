@@ -1,4 +1,4 @@
-import productImage from "@/assets/data/2.jpg";
+import productImage from "@/src/assets/data/2.jpg";
 
 export interface Product {
   id: number;
