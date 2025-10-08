@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -6,58 +5,24 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-
-// Mock cart data
-const initialCartItems = [
-  {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    price: 299.99,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80",
-    quantity: 2,
-    stock: 15
-  },
-  {
-    id: 2,
-    name: "Smart Fitness Watch",
-    price: 199.99,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&q=80",
-    quantity: 1,
-    stock: 8
-  },
-  {
-    id: 3,
-    name: "Premium Leather Bag",
-    price: 149.99,
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&q=80",
-    quantity: 1,
-    stock: 12
-  }
-];
+import { useCart } from "@/contexts/CartContext";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState(initialCartItems);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { cart, updateQuantity, removeFromCart, cartTotal } = useCart();
 
-  const updateQuantity = (id: number, newQuantity: number) => {
+  const handleUpdateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity === 0) {
-      removeItem(id);
+      handleRemoveItem(id);
       return;
     }
-    
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id 
-          ? { ...item, quantity: Math.min(newQuantity, item.stock) }
-          : item
-      )
-    );
+    updateQuantity(id, newQuantity);
   };
 
-  const removeItem = (id: number) => {
-    const item = cartItems.find(item => item.id === id);
-    setCartItems(items => items.filter(item => item.id !== id));
+  const handleRemoveItem = (id: number) => {
+    const item = cart.find(item => item.id === id);
+    removeFromCart(id);
     
     toast({
       title: "Item Removed",
@@ -65,13 +30,13 @@ export default function Cart() {
     });
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cartTotal;
   const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = subtotal * 0.08; // 8% tax
+  const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
   const handleCheckout = () => {
-    if (cartItems.length === 0) {
+    if (cart.length === 0) {
       toast({
         title: "Cart is empty",
         description: "Add some items to your cart before checkout",
@@ -82,7 +47,7 @@ export default function Cart() {
     navigate("/checkout");
   };
 
-  if (cartItems.length === 0) {
+  if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -124,7 +89,7 @@ export default function Cart() {
             <h1 className="text-3xl font-bold">Shopping Cart</h1>
             
             <div className="space-y-4">
-              {cartItems.map((item) => (
+              {cart.map((item) => (
                 <div key={item.id} className="bg-card rounded-lg p-6 shadow-soft">
                   <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                     {/* Product Image */}
@@ -139,10 +104,7 @@ export default function Cart() {
                     {/* Product Info */}
                     <div className="flex-1 space-y-2">
                       <h3 className="font-semibold text-lg">{item.name}</h3>
-                      <p className="text-xl font-bold text-price">${item.price}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.stock} items in stock
-                      </p>
+                      <p className="text-xl font-bold text-price">${item.price.toFixed(2)}</p>
                     </div>
 
                     {/* Quantity Controls */}
@@ -151,7 +113,7 @@ export default function Cart() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
                           className="h-8 w-8"
                         >
@@ -163,8 +125,7 @@ export default function Cart() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          disabled={item.quantity >= item.stock}
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                           className="h-8 w-8"
                         >
                           <Plus className="h-3 w-3" />
@@ -174,7 +135,7 @@ export default function Cart() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => handleRemoveItem(item.id)}
                         className="text-destructive hover:text-destructive h-8 w-8"
                       >
                         <Trash2 className="h-4 w-4" />

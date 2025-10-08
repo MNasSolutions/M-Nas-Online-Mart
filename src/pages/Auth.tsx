@@ -262,29 +262,6 @@ export default function Auth() {
           </div>
         </div>
 
-        {/* Moniepoint Account Details */}
-        <div className="mt-8 bg-card rounded-2xl shadow-strong p-6 border">
-          <h3 className="text-lg font-semibold mb-4 text-center">Payment Information</h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Bank:</span>
-              <span className="font-medium">Moniepoint Microfinance Bank</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Account Name:</span>
-              <span className="font-medium">M Nas Online Mart</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Account Number:</span>
-              <span className="font-medium">5029683574</span>
-            </div>
-            <div className="mt-4 p-3 bg-muted rounded-lg">
-              <p className="text-xs text-muted-foreground text-center">
-                Transfer to this account for order payments and confirm via WhatsApp
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
