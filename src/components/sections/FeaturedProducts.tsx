@@ -2,7 +2,7 @@ import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-import productImage from "@/assets/data/2.jpg";
+import productImage from "@/assets/2.jpg";
 
 // Mock product data
 const products = [
