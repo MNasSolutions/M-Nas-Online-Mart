@@ -1,7 +1,8 @@
 import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
 import productImage from "@/assets/2.jpg";
 
 // Mock product data
@@ -54,19 +55,24 @@ const products = [
 
 export function FeaturedProducts() {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
 
-  const handleAddToCart = (productName: string) => {
+  const handleAddToCart = (product: typeof products[0]) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image
+    });
     toast({
       title: "Added to Cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
-  const handleBuyNow = (productName: string) => {
-    toast({
-      title: "Buy Now",
-      description: `Redirecting to checkout for ${productName}...`,
-    });
+  const handleBuyNow = (productId: number) => {
+    navigate("/product-detail");
   };
 
   const handleWishlist = (productName: string) => {
@@ -128,7 +134,7 @@ export function FeaturedProducts() {
                       variant="cta" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handleBuyNow(product.name)}
+                      onClick={() => handleBuyNow(product.id)}
                     >
                       Buy Now
                     </Button>
@@ -136,7 +142,7 @@ export function FeaturedProducts() {
                       variant="outline" 
                       size="sm" 
                       className="flex-1 bg-white/90 hover:bg-white"
-                      onClick={() => handleAddToCart(product.name)}
+                      onClick={() => handleAddToCart(product)}
                     >
                       <ShoppingCart className="h-4 w-4 mr-1" />
                       Add
