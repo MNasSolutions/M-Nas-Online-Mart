@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
 
 // Mock product data
 const product = {
@@ -47,8 +48,15 @@ export default function ProductDetail() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0]
+    });
     toast({
       title: "Added to Cart!",
       description: `${quantity} ${product.name} added to your cart.`,
@@ -57,7 +65,12 @@ export default function ProductDetail() {
 
   const handleBuyNow = () => {
     // Add to cart first, then redirect to checkout
-    handleAddToCart();
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.images[0]
+    });
     navigate("/checkout");
   };
 

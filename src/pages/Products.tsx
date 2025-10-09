@@ -6,6 +6,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { products, getProductsByCategory, searchProducts, Product } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
+import { useNavigate } from "react-router-dom";
 
 
 const categories = [
@@ -22,6 +24,8 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const { toast } = useToast();
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let filtered = products;
@@ -56,6 +60,12 @@ export default function Products() {
   };
 
   const handleAddToCart = (product: Product) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image
+    });
     toast({
       title: "Added to Cart",
       description: `${product.name} has been added to your cart.`,
@@ -63,10 +73,13 @@ export default function Products() {
   };
 
   const handleBuyNow = (product: Product) => {
-    toast({
-      title: "Buy Now",
-      description: `Redirecting to checkout for ${product.name}...`,
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image
     });
+    navigate("/checkout");
   };
 
   const handleWishlist = (product: Product) => {
