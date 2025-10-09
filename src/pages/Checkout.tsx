@@ -10,26 +10,11 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
-// Mock cart data
-const cartItems = [
-  {
-    id: 1,
-    name: "Premium Wireless Headphones",
-    price: 299.99,
-    quantity: 2,
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&q=80"
-  },
-  {
-    id: 2,
-    name: "Smart Fitness Watch",
-    price: 199.99,
-    quantity: 1,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&q=80"
-  }
-];
 
 export default function Checkout() {
+  const { cart, cartTotal } = useCart();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // Customer Info
@@ -55,7 +40,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cartTotal;
   const shipping = subtotal > 100 ? 0 : 9.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
@@ -441,7 +426,7 @@ export default function Checkout() {
               
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
-                {cartItems.map((item) => (
+                {cart.map((item) => (
                   <div key={item.id} className="flex space-x-3">
                     <img
                       src={item.image}
