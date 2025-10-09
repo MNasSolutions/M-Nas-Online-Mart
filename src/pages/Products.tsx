@@ -73,7 +73,7 @@ export default function Products() {
   };
 
   const handleBuyNow = (product: Product) => {
-    navigate("/product-detail");
+    navigate(`/product/${product.id}`);
   };
 
   const handleWishlist = (product: Product) => {

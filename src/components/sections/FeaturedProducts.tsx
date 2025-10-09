@@ -72,7 +72,7 @@ export function FeaturedProducts() {
   };
 
   const handleBuyNow = (productId: number) => {
-    navigate("/product-detail");
+    navigate(`/product/${productId}`);
   };
 
   const handleWishlist = (productName: string) => {
