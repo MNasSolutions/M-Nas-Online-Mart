@@ -3,55 +3,11 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
-import productImage from "@/assets/2.jpg";
+import { products as allProducts, Product } from "@/data/products";
 
-// Mock product data
-const products = [
-  {
-    id: 1,
-    name: "Power Bank",
-    price: 299.99,
-    originalPrice: 399.99,
-    rating: 4.8,
-    reviews: 156,
-    image: productImage,
-    badge: "Best Seller",
-    badgeColor: "bg-primary"
-  },
-  {
-    id: 2,
-    name: "Smart Fitness Watch",
-    price: 199.99,
-    originalPrice: null,
-    rating: 4.9,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
-    badge: "New",
-    badgeColor: "bg-success"
-  },
-  {
-    id: 3,
-    name: "Premium Leather Bag",
-    price: 149.99,
-    originalPrice: 219.99,
-    rating: 4.7,
-    reviews: 234,
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
-    badge: "Sale",
-    badgeColor: "bg-secondary"
-  },
-  {
-    id: 4,
-    name: "Modern Table Lamp",
-    price: 89.99,
-    originalPrice: null,
-    rating: 4.6,
-    reviews: 67,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-    badge: null,
-    badgeColor: ""
-  }
-];
+// Featured products pulled from the global catalog to keep IDs consistent
+const featuredIds = [1, 2, 11, 21];
+const products: Product[] = allProducts.filter((p) => featuredIds.includes(p.id));
 
 export function FeaturedProducts() {
   const { toast } = useToast();
