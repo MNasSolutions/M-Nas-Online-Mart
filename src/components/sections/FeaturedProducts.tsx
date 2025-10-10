@@ -71,8 +71,14 @@ export function FeaturedProducts() {
     });
   };
 
-  const handleBuyNow = (productId: number) => {
-    navigate(`/product/${productId}`);
+  const handleBuyNow = (product: typeof products[0]) => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    });
+    navigate("/checkout");
   };
 
   const handleWishlist = (productName: string) => {
@@ -134,7 +140,7 @@ export function FeaturedProducts() {
                       variant="cta" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handleBuyNow(product.id)}
+                      onClick={() => handleBuyNow(product)}
                     >
                       Buy Now
                     </Button>
