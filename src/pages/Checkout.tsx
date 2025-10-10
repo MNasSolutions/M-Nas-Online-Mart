@@ -251,16 +251,27 @@ export default function Checkout() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="country">Country *</Label>
+                      <Label htmlFor="country">State/Region *</Label>
                       <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
                         <SelectTrigger className={errors.country ? "border-destructive" : ""}>
-                          <SelectValue placeholder="Select country" />
+                          <SelectValue placeholder="Select state/region" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="us">United States</SelectItem>
-                          <SelectItem value="ca">Canada</SelectItem>
-                          <SelectItem value="uk">United Kingdom</SelectItem>
-                          <SelectItem value="au">Australia</SelectItem>
+                          <SelectItem value="kano">Kano</SelectItem>
+                          <SelectItem value="abuja">Abuja (FCT)</SelectItem>
+                          <SelectItem value="kaduna">Kaduna</SelectItem>
+                          <SelectItem value="lagos">Lagos</SelectItem>
+                          <SelectItem value="port-harcourt">Port Harcourt</SelectItem>
+                          <SelectItem value="ibadan">Ibadan</SelectItem>
+                          <SelectItem value="benin">Benin City</SelectItem>
+                          <SelectItem value="jos">Jos</SelectItem>
+                          <SelectItem value="enugu">Enugu</SelectItem>
+                          <SelectItem value="calabar">Calabar</SelectItem>
+                          <SelectItem value="owerri">Owerri</SelectItem>
+                          <SelectItem value="sokoto">Sokoto</SelectItem>
+                          <SelectItem value="maiduguri">Maiduguri</SelectItem>
+                          <SelectItem value="bauchi">Bauchi</SelectItem>
+                          <SelectItem value="gombe">Gombe</SelectItem>
                         </SelectContent>
                       </Select>
                       {errors.country && <p className="text-sm text-destructive mt-1">{errors.country}</p>}

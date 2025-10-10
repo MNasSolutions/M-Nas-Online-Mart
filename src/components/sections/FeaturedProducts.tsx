@@ -72,13 +72,7 @@ export function FeaturedProducts() {
   };
 
   const handleBuyNow = (product: typeof products[0]) => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-    });
-    navigate("/checkout");
+    navigate(`/product/${product.id}`);
   };
 
   const handleWishlist = (productName: string) => {

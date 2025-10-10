@@ -73,13 +73,7 @@ export default function Products() {
   };
 
   const handleBuyNow = (product: Product) => {
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image
-    });
-    navigate("/checkout");
+    navigate(`/product/${product.id}`);
   };
 
   const handleWishlist = (product: Product) => {
