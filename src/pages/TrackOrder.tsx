@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Package, MapPin, CheckCircle, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import TrackingMap from "@/components/TrackingMap";
 
 export default function TrackOrder() {
   const [searchParams] = useSearchParams();
@@ -146,6 +147,15 @@ export default function TrackOrder() {
                     <p className="text-sm text-muted-foreground">Shipping Address</p>
                     <p className="font-semibold">{order.shipping_address}</p>
                   </div>
+                </CardContent>
+              </Card>
+
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle>Tracking Map</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <TrackingMap trackingData={tracking} />
                 </CardContent>
               </Card>
 
