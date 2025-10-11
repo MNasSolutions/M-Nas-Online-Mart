@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, useSearchParams, Link, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 // Mock order data
@@ -54,6 +54,7 @@ export default function OrderConfirmation() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [orderNumber, setOrderNumber] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     const orderNum = searchParams.get("orderNumber");
@@ -160,7 +161,7 @@ export default function OrderConfirmation() {
             <div className="bg-card rounded-lg p-6 shadow-soft">
               <h2 className="text-xl font-semibold mb-4">Order Items</h2>
               <div className="space-y-4">
-                {orderData.items.map((item) => (
+                {((location.state as any)?.items ?? orderData.items).map((item: any) => (
                   <div key={item.id} className="flex space-x-4 p-4 border rounded-lg">
                     <img
                       src={item.image}
@@ -183,7 +184,7 @@ export default function OrderConfirmation() {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Continue Shopping
               </Button>
-              <Button variant="outline" size="lg" onClick={() => navigate("/account/orders")} className="flex-1">
+              <Button variant="outline" size="lg" onClick={() => navigate(`/track-order?order=${orderNumber}`)} className="flex-1">
                 <Package className="h-4 w-4 mr-2" />
                 Track Order
               </Button>
@@ -198,20 +199,24 @@ export default function OrderConfirmation() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${orderData.payment.subtotal.toFixed(2)}</span>
+                  <span>${(((location.state as any)?.subtotal ?? orderData.payment.subtotal)).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  <span className="text-success">Free</span>
+                  {((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100) ? (
+                    <span className="text-success">Free</span>
+                  ) : (
+                    <span>${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100 ? 0 : 9.99)).toFixed(2)}</span>
+                  ))}
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${orderData.payment.tax.toFixed(2)}</span>
+                  <span>${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) * 0.08)).toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-price">${orderData.payment.total.toFixed(2)}</span>
+                  <span className="text-price">${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) + ((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100 ? 0 : 9.99)) + ((((location.state as any)?.subtotal ?? orderData.payment.subtotal) * 0.08))).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -262,7 +267,7 @@ export default function OrderConfirmation() {
                   <Button variant="outline" size="sm" className="w-full">
                     Contact Support
                   </Button>
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full" onClick={() => navigate(`/track-order?order=${orderNumber}`)}>
                     <Truck className="h-4 w-4 mr-2" />
                     Track Package
                   </Button>

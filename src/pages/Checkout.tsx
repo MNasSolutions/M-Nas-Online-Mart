@@ -119,7 +119,9 @@ export default function Checkout() {
       });
 
       // Redirect to order confirmation
-      navigate(`/order-confirmation?orderNumber=${orderNumber}`);
+      navigate(`/order-confirmation?orderNumber=${orderNumber}`, {
+        state: { items: cart, subtotal: subtotal }
+      });
     } catch (error) {
       toast({
         title: "Payment failed",
