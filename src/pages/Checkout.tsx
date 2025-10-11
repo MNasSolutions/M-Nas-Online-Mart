@@ -11,6 +11,7 @@ import { Footer } from "@/components/layout/Footer";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 
 export default function Checkout() {
@@ -39,6 +40,7 @@ export default function Checkout() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { format } = useCurrency();
 
   const subtotal = cartTotal;
   const shipping = subtotal > 100 ? 0 : 9.99;
@@ -426,7 +428,7 @@ export default function Checkout() {
                   disabled={loading}
                   className="flex-1"
                 >
-                  {loading ? "Processing..." : `Place Order - $${total.toFixed(2)}`}
+                  {loading ? "Processing..." : `Place Order - ${format(total)}`}
                 </Button>
               </div>
             </form>
@@ -449,7 +451,7 @@ export default function Checkout() {
                     <div className="flex-1">
                       <h4 className="font-medium text-sm">{item.name}</h4>
                       <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                      <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-sm font-medium">{format(item.price * item.quantity)}</p>
                     </div>
                   </div>
                 ))}
@@ -461,15 +463,15 @@ export default function Checkout() {
               <div className="space-y-2 mb-6">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>{format(subtotal)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                  <span>{shipping === 0 ? "Free" : format(shipping)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>{format(tax)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">

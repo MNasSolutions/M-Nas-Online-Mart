@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { products as allProducts } from "@/data/products";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 // Using dynamic product data from catalog
 
@@ -20,6 +21,7 @@ export default function ProductDetail() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { format } = useCurrency();
 
   // Resolve product by route param
   const { id } = useParams();
@@ -165,8 +167,8 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="flex items-center space-x-4">
-              <span className="text-3xl font-bold text-price">${product.price}</span>
-              <span className="text-xl text-muted-foreground line-through">${product.originalPrice}</span>
+              <span className="text-3xl font-bold text-price">{format(product.price)}</span>
+              <span className="text-xl text-muted-foreground line-through">{format(product.originalPrice)}</span>
               <Badge variant="secondary" className="text-sm font-semibold">
                 {discountPercentage}% OFF
               </Badge>

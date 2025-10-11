@@ -7,6 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSearch } from "@/hooks/useSearch";
 import {
   AlertDialog,
@@ -26,6 +28,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+function CurrencySwitcher() {
+  const { currency, setCurrency } = useCurrency();
+  return (
+    <Select value={currency} onValueChange={(v) => setCurrency(v as any)}>
+      <SelectTrigger className="w-[88px]">
+        <SelectValue placeholder="USD" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="USD">USD</SelectItem>
+        <SelectItem value="NGN">NGN</SelectItem>
+        <SelectItem value="EUR">EUR</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+}
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,6 +71,8 @@ export function Header() {
     }
     setShowLogoutDialog(false);
   };
+
+  const { currency, setCurrency } = useCurrency();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -108,6 +128,8 @@ export function Header() {
 
           {/* Action Icons */}
           <div className="flex items-center space-x-2">
+            {/* Currency selector */}
+            <CurrencySwitcher />
             <Button variant="ghost" size="icon" className="relative hidden sm:flex">
               <Heart className="h-5 w-5" />
             </Button>

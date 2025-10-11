@@ -22,6 +22,8 @@ import FAQ from "./pages/FAQ";
 import ShippingInfo from "./pages/ShippingInfo";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import NotFound from "./pages/NotFound";
+import Chatbot from "@/components/Chatbot";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
 const queryClient = new QueryClient();
 
@@ -29,10 +31,12 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <CartProvider>
+        <CurrencyProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <Chatbot />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
@@ -44,6 +48,7 @@ const App = () => (
               <Route path="/account/wishlist" element={<Wishlist />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/track-order" element={<TrackOrder />} />
+              <Route path="/account/orders" element={<TrackOrder />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/faq" element={<FAQ />} />
@@ -55,6 +60,7 @@ const App = () => (
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
+        </CurrencyProvider>
       </CartProvider>
     </AuthProvider>
   </QueryClientProvider>
