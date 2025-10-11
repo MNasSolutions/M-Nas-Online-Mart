@@ -56,6 +56,13 @@ export default function OrderConfirmation() {
   const [orderNumber, setOrderNumber] = useState("");
   const location = useLocation();
 
+  // Calculate order totals from location state or use default
+  const orderItems = (location.state as any)?.items ?? orderData.items;
+  const subtotal = (location.state as any)?.subtotal ?? orderData.payment.subtotal;
+  const shipping = subtotal > 100 ? 0 : 9.99;
+  const tax = subtotal * 0.08;
+  const total = subtotal + shipping + tax;
+
   useEffect(() => {
     const orderNum = searchParams.get("orderNumber");
     if (orderNum) {
@@ -161,7 +168,7 @@ export default function OrderConfirmation() {
             <div className="bg-card rounded-lg p-6 shadow-soft">
               <h2 className="text-xl font-semibold mb-4">Order Items</h2>
               <div className="space-y-4">
-                {((location.state as any)?.items ?? orderData.items).map((item: any) => (
+                {orderItems.map((item: any) => (
                   <div key={item.id} className="flex space-x-4 p-4 border rounded-lg">
                     <img
                       src={item.image}
@@ -199,24 +206,24 @@ export default function OrderConfirmation() {
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span>${(((location.state as any)?.subtotal ?? orderData.payment.subtotal)).toFixed(2)}</span>
+                  <span>${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Shipping</span>
-                  {((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100) ? (
+                  {shipping === 0 ? (
                     <span className="text-success">Free</span>
                   ) : (
-                    <span>${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100 ? 0 : 9.99)).toFixed(2)}</span>
-                  ))}
+                    <span>${shipping.toFixed(2)}</span>
+                  )}
                 </div>
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span>${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) * 0.08)).toFixed(2)}</span>
+                  <span>${tax.toFixed(2)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-price">${((((location.state as any)?.subtotal ?? orderData.payment.subtotal) + ((((location.state as any)?.subtotal ?? orderData.payment.subtotal) > 100 ? 0 : 9.99)) + ((((location.state as any)?.subtotal ?? orderData.payment.subtotal) * 0.08))).toFixed(2)}</span>
+                  <span className="text-price">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
