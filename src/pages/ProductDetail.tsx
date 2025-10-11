@@ -6,41 +6,12 @@ import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { products as allProducts } from "@/data/products";
 
-// Mock product data
-const product = {
-  id: 1,
-  name: "Premium Wireless Headphones",
-  price: 299.99,
-  originalPrice: 399.99,
-  rating: 4.8,
-  reviews: 156,
-  stock: 15,
-  images: [
-    "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&q=80",
-    "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600&q=80",
-    "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=600&q=80"
-  ],
-  description: "Experience crystal-clear audio with our premium wireless headphones. Features active noise cancellation, 30-hour battery life, and premium comfort padding.",
-  features: [
-    "Active Noise Cancellation",
-    "30-hour battery life",
-    "Premium comfort padding",
-    "Quick charge - 5 min = 2 hours",
-    "Bluetooth 5.0 connectivity",
-    "Built-in microphone"
-  ],
-  specifications: {
-    "Driver Size": "40mm",
-    "Frequency Response": "20Hz - 20kHz",
-    "Impedance": "32 ohms",
-    "Weight": "250g",
-    "Connectivity": "Bluetooth 5.0, 3.5mm jack",
-    "Battery": "30 hours wireless, 40 hours wired"
-  }
-};
+// Using dynamic product data from catalog
+
 
 export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -49,6 +20,53 @@ export default function ProductDetail() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+
+  // Resolve product by route param
+  const { id } = useParams();
+  const dataProduct = allProducts.find((p) => p.id === Number(id));
+
+  if (!dataProduct) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto px-4 py-16 text-center">
+          <h1 className="text-2xl font-bold mb-4">Product not found</h1>
+          <Button asChild>
+            <a href="/products">Back to Products</a>
+          </Button>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Normalize product shape to reuse the existing UI
+  const product = {
+    id: dataProduct.id,
+    name: dataProduct.name,
+    price: dataProduct.price,
+    originalPrice: dataProduct.originalPrice ?? dataProduct.price,
+    rating: dataProduct.rating,
+    reviews: dataProduct.reviews,
+    stock: 15,
+    images: [dataProduct.image],
+    description: dataProduct.description,
+    features: [
+      "Premium quality materials",
+      "Fast shipping and delivery",
+      "Secure packaging",
+      "30-day returns policy",
+      "Reliable customer support",
+      "Multi-currency support"
+    ],
+    specifications: {
+      "Category": dataProduct.category,
+      "Model": dataProduct.name,
+      "Warranty": "12 months",
+      "Package": "Retail box",
+      "Ships from": "Global Warehouse"
+    }
+  } as const;
 
   const handleAddToCart = () => {
     addToCart({
