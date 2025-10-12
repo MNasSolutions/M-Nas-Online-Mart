@@ -1,17 +1,27 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 
-export type Currency = "USD" | "NGN" | "EUR";
+export type Currency = "USD" | "NGN" | "EUR" | "GBP" | "JPY" | "CAD" | "AUD" | "CNY";
 
 const symbols: Record<Currency, string> = {
   USD: "$",
   NGN: "₦",
   EUR: "€",
+  GBP: "£",
+  JPY: "¥",
+  CAD: "C$",
+  AUD: "A$",
+  CNY: "¥",
 };
 
 const rates: Record<Currency, number> = {
   USD: 1,      // base
-  NGN: 1500,   // example rate
-  EUR: 0.92,   // example rate
+  NGN: 1500,   // Nigerian Naira
+  EUR: 0.92,   // Euro
+  GBP: 0.79,   // British Pound
+  JPY: 149.50, // Japanese Yen
+  CAD: 1.36,   // Canadian Dollar
+  AUD: 1.52,   // Australian Dollar
+  CNY: 7.24,   // Chinese Yuan
 };
 
 interface CurrencyContextValue {

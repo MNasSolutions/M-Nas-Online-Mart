@@ -33,7 +33,7 @@ export function HeroSection() {
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
-              <Button variant="outline" size="xl" className="group" onClick={() => window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')}>
+              <Button variant="outline" size="xl" className="group" onClick={() => window.open('https://m.youtube.com/channel/UCjsbfp-fyIDkGxyOx4hDVXQ', '_blank')}>
                 <Play className="h-5 w-5 group-hover:scale-110 transition-transform" />
                 Watch Demo
               </Button>

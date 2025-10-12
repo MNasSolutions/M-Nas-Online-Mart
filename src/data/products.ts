@@ -8,6 +8,7 @@ export interface Product {
   rating: number;
   reviews: number;
   image: string;
+  images?: string[]; // Multiple images for product gallery
   badge?: string;
   badgeColor?: string;
   category: 'electronics' | 'fashion' | 'home' | 'sports';
@@ -18,16 +19,22 @@ export const products: Product[] = [
   // Electronics
   {
     id: 1,
-    name: "Power Bank",
+    name: "Power Bank 20000mAh",
     price: 299.99,
     originalPrice: 399.99,
     rating: 4.8,
     reviews: 156,
-    image: productImage,
+    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=400&q=80",
+      "https://images.unsplash.com/photo-1632207691443-9937b57125e6?w=400&q=80",
+      "https://images.unsplash.com/photo-1601524909162-ae8725290836?w=400&q=80"
+    ],
     badge: "Best Seller",
     badgeColor: "bg-primary",
     category: "electronics",
-    description: "Ultra Fast Charging Power Bank"
+    description: "Ultra Fast Charging Power Bank with 20000mAh capacity, dual USB ports, LED display, and fast charging technology"
   },
   {
     id: 2,

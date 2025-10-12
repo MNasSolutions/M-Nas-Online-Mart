@@ -51,7 +51,7 @@ export default function ProductDetail() {
     rating: dataProduct.rating,
     reviews: dataProduct.reviews,
     stock: 15,
-    images: [dataProduct.image],
+    images: dataProduct.images || [dataProduct.image],
     description: dataProduct.description,
     features: [
       "Premium quality materials",
