@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { products as allProducts } from "@/data/products";
 import { useCurrency } from "@/contexts/CurrencyContext";
@@ -34,7 +34,7 @@ export default function ProductDetail() {
         <main className="container mx-auto px-4 py-16 text-center">
           <h1 className="text-2xl font-bold mb-4">Product not found</h1>
           <Button asChild>
-            <a href="/products">Back to Products</a>
+            <Link to="/products">Back to Products</Link>
           </Button>
         </main>
         <Footer />

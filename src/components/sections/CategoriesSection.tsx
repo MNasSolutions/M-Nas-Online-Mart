@@ -1,6 +1,7 @@
 import electronicsIcon from "@/assets/category-electronics.png";
 import fashionIcon from "@/assets/category-fashion.png";
 import homeIcon from "@/assets/category-home.png";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -56,9 +57,9 @@ export function CategoriesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
-            <a 
+            <Link 
               key={category.id}
-              href={`/products?category=${category.name.toLowerCase().replace(' & ', '-').replace(' ', '-')}`}
+              to={`/products?category=${category.name.toLowerCase().replace(' & ', '-').replace(' ', '-')}`}
               className="group cursor-pointer animate-fade-in block"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -83,7 +84,7 @@ export function CategoriesSection() {
                   {category.itemCount}
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

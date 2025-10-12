@@ -37,9 +37,14 @@ function CurrencySwitcher() {
         <SelectValue placeholder="USD" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="USD">USD</SelectItem>
-        <SelectItem value="NGN">NGN</SelectItem>
-        <SelectItem value="EUR">EUR</SelectItem>
+          <SelectItem value="USD">USD</SelectItem>
+          <SelectItem value="NGN">NGN</SelectItem>
+          <SelectItem value="EUR">EUR</SelectItem>
+          <SelectItem value="GBP">GBP</SelectItem>
+          <SelectItem value="JPY">JPY</SelectItem>
+          <SelectItem value="CAD">CAD</SelectItem>
+          <SelectItem value="AUD">AUD</SelectItem>
+          <SelectItem value="CNY">CNY</SelectItem>
       </SelectContent>
     </Select>
   );

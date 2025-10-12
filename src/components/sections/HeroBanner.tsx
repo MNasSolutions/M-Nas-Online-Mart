@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -44,7 +45,7 @@ export function HeroBanner() {
                           size="lg"
                           asChild
                         >
-                          <a href={`/product/${product.id}`}>Shop Now</a>
+                          <Link to={`/product/${product.id}`}>Shop Now</Link>
                         </Button>
                       </div>
                     </div>

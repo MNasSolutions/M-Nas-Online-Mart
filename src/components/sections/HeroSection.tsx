@@ -1,5 +1,6 @@
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import heroBanner from "@/assets/hero-banner.jpg";
 
 export function HeroSection() {
@@ -28,10 +29,10 @@ export function HeroSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="hero" size="xl" className="group" asChild>
-                <a href="/products">
+                <Link to="/products">
                   Shop Now
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </Link>
               </Button>
               <Button variant="outline" size="xl" className="group" onClick={() => window.open('https://m.youtube.com/channel/UCjsbfp-fyIDkGxyOx4hDVXQ', '_blank')}>
                 <Play className="h-5 w-5 group-hover:scale-110 transition-transform" />
