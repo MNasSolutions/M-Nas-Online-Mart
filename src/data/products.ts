@@ -1,5 +1,5 @@
 import productImage from "@/assets/2.jpg";
-import light from "@/assets/12.jpg";
+import power from "@/assets/12.jpg";
 
 export interface Product {
   id: number;
@@ -39,15 +39,15 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Rechargeable Light",
-    price: 3.43,
+    name: "Power Bank",
+    price: 6.85,
     rating: 5.3,
     reviews: 129,
-    image: light,
+    image: power,
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
-    description: "Long Lasting Rechargeable Light"
+    description: "Fast Charging Power Bank"
   },
   {
     id: 3,
