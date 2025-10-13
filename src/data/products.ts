@@ -22,7 +22,7 @@ export const products: Product[] = [
     name: "Power Bank 20000mAh",
     price: 12.33,
     originalPrice: 17.13,
-    rating: 4.8,
+    rating: 5.8,
     reviews: 156,
     image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
     images: [
