@@ -1,4 +1,5 @@
 import productImage from "@/assets/2.jpg";
+import Light from "@/assets/IMG-20250802-WA0027.jpg";
 
 export interface Product {
   id: number;
@@ -38,15 +39,15 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Power Banks",
-    price: 12.33,
-    rating: 5.0,
+    name: "Rechargeable Light",
+    price: 3.43,
+    rating: 5.3,
     reviews: 129,
-    image: productImage,
+    image: Light,
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
-    description: "Fast Charging Power Bank with 10000mAh capacity, dual USB ports, LED display, and fast charging technology"
+    description: "Long Lasting Rechargeable Light"
   },
   {
     id: 3,
