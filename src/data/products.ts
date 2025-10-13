@@ -40,7 +40,6 @@ export const products: Product[] = [
     id: 2,
     name: "Power Banks",
     price: 12.33,
-    originalPrice: 17.13,
     rating: 5.0,
     reviews: 129,
     image: productImage,
