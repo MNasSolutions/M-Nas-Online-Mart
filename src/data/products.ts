@@ -1,5 +1,5 @@
 import productImage from "@/assets/2.jpg";
-import Light from "@/assets/IMG-20250802-WA0027.jpg";
+import light from "@/assets/12.jpg";
 
 export interface Product {
   id: number;
@@ -43,7 +43,7 @@ export const products: Product[] = [
     price: 3.43,
     rating: 5.3,
     reviews: 129,
-    image: Light,
+    image: light,
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
