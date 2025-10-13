@@ -28,7 +28,7 @@ export const products: Product[] = [
     images: [
       "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
       "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=400&q=80",
-      "https://images.unsplash.com/photo-1632207691443-9937b57125e6?w=400&q=80",
+      productImage,
       "https://images.unsplash.com/photo-1601524909162-ae8725290836?w=400&q=80"
     ],
     badge: "Best Seller",
@@ -38,15 +38,16 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Smart Fitness Watch",
-    price: 199.99,
-    rating: 4.9,
-    reviews: 89,
+    name: "Power Banks",
+    price: 12.33,
+    originalPrice: 17.13,
+    rating: 5.0,
+    reviews: 129,
     image: productImage,
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
-    description: "Advanced fitness tracking with heart rate monitor"
+    description: "Fast Charging Power Bank with 10000mAh capacity, dual USB ports, LED display, and fast charging technology"
   },
   {
     id: 3,
