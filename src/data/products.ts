@@ -2,7 +2,7 @@ import productImage from "@/assets/2.jpg";
 import bank from "@/assets/12.jpg";
 import arduino from "@/assets/arduino.png";
 import arduinokit from "@/assets/Arduino_car_kit.png";
-import mypowerbank from "@/assets/powerbank.png";
+import mypowerbank from "@/assets/powerbank.jpg";
 
 export interface Product {
   id: number;
