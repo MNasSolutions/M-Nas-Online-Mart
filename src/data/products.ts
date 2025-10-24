@@ -1,6 +1,6 @@
 import productImage from "@/assets/2.jpg";
 import bank from "@/assets/12.jpg";
-import arduino from "@/assets/Arduino_car_kit.png";
+import arduino from "@/assets/arduino.png";
 
 export interface Product {
   id: number;
