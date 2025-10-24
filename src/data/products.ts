@@ -2,6 +2,7 @@ import productImage from "@/assets/2.jpg";
 import bank from "@/assets/12.jpg";
 import arduino from "@/assets/arduino.png";
 import arduinokit from "@/assets/Arduino_car_kit.png";
+import mypowerbank from "@/assets/powerbank.png";
 
 export interface Product {
   id: number;
@@ -66,13 +67,14 @@ export const products: Product[] = [
   },
   {
     id: 4,
-    name: "Smartphone 5G Pro",
-    price: 899.99,
-    rating: 4.6,
-    reviews: 67,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80",
+    name: "Power Bank",
+    price: 12.33,
+    originalPrice: 17.12,
+    rating: 5.6,
+    reviews: 1K,
+    image: mypowerbank,
     category: "electronics",
-    description: "Latest 5G smartphone with triple camera system"
+    description: "A compact and powerful portable charger with a 10,000 mAh capacity, designed to keep your devices charged all day. It can charge most smartphones 2–3 times, supports fast charging, and features dual USB ports for multiple devices."
   },
   {
     id: 5,
