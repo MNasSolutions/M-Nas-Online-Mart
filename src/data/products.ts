@@ -3,6 +3,9 @@ import bank from "@/assets/12.jpg";
 import arduino from "@/assets/arduino.png";
 import arduinokit from "@/assets/Arduino_car_kit.png";
 import mypowerbank from "@/assets/powerbank.jpg";
+import power2 from "@/assets/power2.jpg";
+import power3 from "@/assets/power3.jpg";
+import power4 from "@/assets/power4.jpg";
 
 export interface Product {
   id: number;
@@ -28,12 +31,11 @@ export const products: Product[] = [
     originalPrice: 17.13,
     rating: 5.8,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
+    image: productImage,
     images: [
-      "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=400&q=80",
-      productImage,
-      "https://images.unsplash.com/photo-1601524909162-ae8725290836?w=400&q=80"
+      power2,
+      power3,
+      power4
     ],
     badge: "Best Seller",
     badgeColor: "bg-primary",
