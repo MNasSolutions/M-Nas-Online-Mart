@@ -53,12 +53,12 @@ export const products: Product[] = [
   {
     id: 3,
     name: "Arduino Uno",
-    price: 1299.99,
-    originalPrice: 1499.99,
-    rating: 4.7,
-    reviews: 234,
+    price: 3.42,
+    originalPrice: 5.48,
+    rating: 4.9,
+    reviews: 334,
     image: arduino,
-    badge: "Sale",
+    badge: "New Product",
     badgeColor: "bg-secondary",
     category: "electronics",
     description: "The Arduino Uno is a microcontroller board based on the ATmega328P"
