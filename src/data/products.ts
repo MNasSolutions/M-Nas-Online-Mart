@@ -35,7 +35,8 @@ export const products: Product[] = [
     images: [
       power2,
       power3,
-      power4
+      power4,
+      productImage
     ],
     badge: "Best Seller",
     badgeColor: "bg-primary",
