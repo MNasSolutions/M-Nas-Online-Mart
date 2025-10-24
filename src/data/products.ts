@@ -43,7 +43,7 @@ export const products: Product[] = [
     id: 2,
     name: "Obstacle Avoidance Robot Car",
     price: 20.27,
-    originalprice: 13.70,
+    originalPrice: 13.70,
     rating: 5.3,
     reviews: 129,
     image: arduinokit,
