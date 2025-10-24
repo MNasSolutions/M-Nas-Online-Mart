@@ -50,7 +50,7 @@ export default function ProductDetail() {
     originalPrice: dataProduct.originalPrice ?? dataProduct.price,
     rating: dataProduct.rating,
     reviews: dataProduct.reviews,
-    stock: 15,
+    stock: 20,
     images: dataProduct.images || [dataProduct.image],
     description: dataProduct.description,
     features: [
@@ -64,7 +64,7 @@ export default function ProductDetail() {
     specifications: {
       "Category": dataProduct.category,
       "Model": dataProduct.name,
-      "Warranty": "12 months",
+      "Warranty": "3 Years",
       "Package": "Retail box",
       "Ships from": "Global Warehouse"
     }
