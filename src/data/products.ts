@@ -74,6 +74,7 @@ export const products: Product[] = [
     reviews: 560,
     image: mypowerbank,
     badge: "New",
+    badgeColor: "bg-success",
     category: "electronics",
     description: "A compact and powerful portable charger with a 10,000 mAh capacity, designed to keep your devices charged all day. It can charge most smartphones 2–3 times, supports fast charging, and features dual USB ports for multiple devices."
   },
