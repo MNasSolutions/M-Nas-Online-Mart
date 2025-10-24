@@ -1,5 +1,6 @@
 import productImage from "@/assets/2.jpg";
 import bank from "@/assets/12.jpg";
+import arduino from "@/assets/Arduino_car_kit.png";
 
 export interface Product {
   id: number;
@@ -51,16 +52,16 @@ export const products: Product[] = [
   },
   {
     id: 3,
-    name: "Laptop Gaming Pro",
+    name: "Arduino Uno",
     price: 1299.99,
     originalPrice: 1499.99,
     rating: 4.7,
     reviews: 234,
-    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80",
+    image: arduino;
     badge: "Sale",
     badgeColor: "bg-secondary",
     category: "electronics",
-    description: "High performance gaming laptop with RTX graphics"
+    description: "The Arduino Uno is a microcontroller board based on the ATmega328P"
   },
   {
     id: 4,
