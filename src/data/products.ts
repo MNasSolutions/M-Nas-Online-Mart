@@ -42,7 +42,7 @@ export const products: Product[] = [
   {
     id: 2,
     name: "Obstacle Avoidance Robot Car",
-    price: 10.27,
+    price: 20.27,
     originalprce: 13.70,
     rating: 5.3,
     reviews: 129,
