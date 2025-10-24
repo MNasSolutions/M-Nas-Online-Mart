@@ -57,7 +57,7 @@ export const products: Product[] = [
     originalPrice: 1499.99,
     rating: 4.7,
     reviews: 234,
-    image: arduino;
+    image: arduino,
     badge: "Sale",
     badgeColor: "bg-secondary",
     category: "electronics",
