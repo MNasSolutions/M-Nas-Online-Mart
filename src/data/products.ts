@@ -1,6 +1,7 @@
 import productImage from "@/assets/2.jpg";
 import bank from "@/assets/12.jpg";
 import arduino from "@/assets/arduino.png";
+import arduinokit from "@/assets/arduino_car_kit.png";
 
 export interface Product {
   id: number;
@@ -40,15 +41,16 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Power Bank",
-    price: 6.85,
+    name: "Obstacle Avoidance Robot Car",
+    price: 10.27,
+    originalprce: 13.70,
     rating: 5.3,
     reviews: 129,
-    image: bank,
+    image: arduinokit,
     badge: "New",
     badgeColor: "bg-success",
     category: "electronics",
-    description: "Fast Charging Power Bank"
+    description: "A smart Arduino-based robot car that automatically detects and avoids obstacles using ultrasonic sensors. Perfect for students, hobbyists, and tech lovers learning robotics and automation."
   },
   {
     id: 3,
