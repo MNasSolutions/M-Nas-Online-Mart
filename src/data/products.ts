@@ -1,4 +1,4 @@
-import productImage from "@/assets/2.jpg";
+import productImage from "@/assets/powerbank.jpg";
 import bank from "@/assets/12.jpg";
 import arduino from "@/assets/arduino.png";
 import arduinokit from "@/assets/Arduino_car_kit.png";
