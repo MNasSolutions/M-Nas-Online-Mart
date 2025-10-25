@@ -28,7 +28,7 @@ const teamMembers = [
     id: 3,
     name: "Abdullahi Adamu",
     role: "Customer Success Manager",
-    image: "robot",
+    image: robot,
     bio: "Ensuring every customer has an exceptional shopping journey",
     email: "emily@mnas.com",
     linkedin: "#",
