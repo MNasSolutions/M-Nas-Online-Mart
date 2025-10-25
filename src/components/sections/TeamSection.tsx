@@ -1,6 +1,7 @@
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import mrrobot from "@/assets/mr robot.jpg";
 
 const teamMembers = [
   {
@@ -25,9 +26,9 @@ const teamMembers = [
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
+    name: "Abdullahi Adamu",
     role: "Customer Success Manager",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
+    image: mrrobot,
     bio: "Ensuring every customer has an exceptional shopping journey",
     email: "emily@mnas.com",
     linkedin: "#",
