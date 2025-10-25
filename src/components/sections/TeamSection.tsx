@@ -1,7 +1,7 @@
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import mrrobot from "@/assets/mr robot.jpg";
+import robot from "@/assets/mr robot.jpg";
 
 const teamMembers = [
   {
@@ -28,7 +28,7 @@ const teamMembers = [
     id: 3,
     name: "Abdullahi Adamu",
     role: "Customer Success Manager",
-    image: mrrobot,
+    image: "robot",
     bio: "Ensuring every customer has an exceptional shopping journey",
     email: "emily@mnas.com",
     linkedin: "#",
