@@ -124,6 +124,7 @@ export type Database = {
           shipping_address: string
           status: string
           total_amount: number
+          tracking_token: string | null
           transaction_id: string | null
           updated_at: string | null
           user_id: string
@@ -140,6 +141,7 @@ export type Database = {
           shipping_address: string
           status?: string
           total_amount: number
+          tracking_token?: string | null
           transaction_id?: string | null
           updated_at?: string | null
           user_id: string
@@ -156,6 +158,7 @@ export type Database = {
           shipping_address?: string
           status?: string
           total_amount?: number
+          tracking_token?: string | null
           transaction_id?: string | null
           updated_at?: string | null
           user_id?: string

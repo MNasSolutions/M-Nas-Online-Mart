@@ -30,6 +30,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Verify authentication - JWT is automatically verified by Supabase when verify_jwt = true (default)
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.error("Unauthorized request - missing Authorization header");
+      return new Response(
+        JSON.stringify({ error: "Unauthorized - Authentication required" }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const orderData: OrderNotificationRequest = await req.json();
 
     const itemsHtml = orderData.items

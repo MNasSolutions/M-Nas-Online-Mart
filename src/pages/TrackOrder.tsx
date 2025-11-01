@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,21 +9,47 @@ import { supabase } from "@/integrations/supabase/client";
 import { Package, MapPin, CheckCircle, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import TrackingMap from "@/components/TrackingMap";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function TrackOrder() {
   const [searchParams] = useSearchParams();
-  const [orderNumber, setOrderNumber] = useState(searchParams.get("order") || "");
+  const navigate = useNavigate();
+  const [trackingToken, setTrackingToken] = useState(searchParams.get("token") || "");
   const [order, setOrder] = useState<any>(null);
   const [tracking, setTracking] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { user, loading: authLoading } = useAuth();
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to track your orders",
+        variant: "destructive",
+      });
+      navigate("/auth");
+    }
+  }, [user, authLoading, navigate, toast]);
 
   const handleTrackOrder = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!orderNumber.trim()) {
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to track your orders",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    if (!trackingToken.trim()) {
       toast({
         title: "Error",
-        description: "Please enter an order number",
+        description: "Please enter a tracking token",
         variant: "destructive",
       });
       return;
@@ -31,10 +57,12 @@ export default function TrackOrder() {
 
     setLoading(true);
     try {
+      // Use tracking_token instead of order_number for secure lookup
       const { data: orderData, error: orderError } = await supabase
         .from("orders")
         .select("*")
-        .eq("order_number", orderNumber.trim())
+        .eq("tracking_token", trackingToken.trim())
+        .eq("user_id", user.id) // Verify user owns the order
         .maybeSingle();
 
       if (orderError) throw orderError;
@@ -42,7 +70,7 @@ export default function TrackOrder() {
       if (!orderData) {
         toast({
           title: "Order not found",
-          description: "No order found with this number",
+          description: "No order found with this tracking token or you don't have access to it",
           variant: "destructive",
         });
         setOrder(null);
@@ -74,10 +102,10 @@ export default function TrackOrder() {
   };
 
   useEffect(() => {
-    if (searchParams.get("order")) {
+    if (searchParams.get("token") && user) {
       handleTrackOrder();
     }
-  }, []);
+  }, [user]);
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
@@ -101,17 +129,17 @@ export default function TrackOrder() {
 
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Enter Order Number</CardTitle>
+              <CardTitle>Enter Tracking Token</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleTrackOrder} className="flex gap-4">
                 <Input
-                  placeholder="Enter your order number"
-                  value={orderNumber}
-                  onChange={(e) => setOrderNumber(e.target.value)}
+                  placeholder="Enter your tracking token from order confirmation email"
+                  value={trackingToken}
+                  onChange={(e) => setTrackingToken(e.target.value)}
                   className="flex-1"
                 />
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading || authLoading}>
                   {loading ? "Tracking..." : "Track Order"}
                 </Button>
               </form>

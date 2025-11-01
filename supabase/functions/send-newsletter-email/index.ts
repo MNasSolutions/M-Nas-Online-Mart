@@ -20,7 +20,29 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Note: This function remains public for newsletter signup (no JWT verification)
+    // However, basic validation is added to prevent abuse
     const { email }: NewsletterRequest = await req.json();
+    
+    // Basic email validation
+    if (!email || typeof email !== 'string' || !email.includes('@') || email.length > 255) {
+      console.error("Invalid email format:", email);
+      return new Response(
+        JSON.stringify({ error: "Invalid email address format" }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Prevent obviously fake/disposable emails (basic check)
+    const disposableDomains = ['tempmail.com', 'throwaway.email', '10minutemail.com'];
+    const emailDomain = email.split('@')[1]?.toLowerCase();
+    if (disposableDomains.includes(emailDomain)) {
+      console.error("Disposable email blocked:", email);
+      return new Response(
+        JSON.stringify({ error: "Disposable email addresses are not allowed" }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     console.log("Newsletter subscription request for:", email);
 
