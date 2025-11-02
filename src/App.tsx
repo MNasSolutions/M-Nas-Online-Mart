@@ -23,6 +23,11 @@ import FAQ from "./pages/FAQ";
 import ShippingInfo from "./pages/ShippingInfo";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import NotFound from "./pages/NotFound";
+import SellerRegistration from "./pages/SellerRegistration";
+import SellerDashboard from "./pages/SellerDashboard";
+import BuyerDashboard from "./pages/BuyerDashboard";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Chatbot from "@/components/Chatbot";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
@@ -55,6 +60,11 @@ const App = () => (
               <Route path="/faq" element={<FAQ />} />
               <Route path="/shipping" element={<ShippingInfo />} />
               <Route path="/returns" element={<ReturnPolicy />} />
+              <Route path="/seller-registration" element={<SellerRegistration />} />
+              <Route path="/seller-dashboard" element={<SellerDashboard />} />
+              <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
+              <Route path="/terms" element={<TermsAndConditions />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
