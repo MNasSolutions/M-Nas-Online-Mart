@@ -49,6 +49,23 @@ export default function SellerRegistration() {
     setFormData(prev => ({ ...prev, [field]: file }));
   };
 
+  const uploadFile = async (file: File, folder: string) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user!.id}/${folder}/${Date.now()}.${fileExt}`;
+    
+    const { data, error } = await supabase.storage
+      .from('seller-documents')
+      .upload(fileName, file);
+    
+    if (error) throw error;
+    
+    const { data: { publicUrl } } = supabase.storage
+      .from('seller-documents')
+      .getPublicUrl(fileName);
+    
+    return publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -74,12 +91,20 @@ export default function SellerRegistration() {
     setLoading(true);
 
     try {
-      // TODO: Upload files to storage if provided
+      // Upload files to storage if provided
       let businessLogoUrl = null;
       let idCardUrl = null;
 
+      if (formData.businessLogo) {
+        businessLogoUrl = await uploadFile(formData.businessLogo, 'logos');
+      }
+
+      if (formData.idCard) {
+        idCardUrl = await uploadFile(formData.idCard, 'id-cards');
+      }
+
       // Insert seller application
-      const { error } = await supabase
+      const { data: applicationData, error } = await supabase
         .from("seller_applications")
         .insert({
           user_id: user.id,
@@ -100,9 +125,19 @@ export default function SellerRegistration() {
           business_website: formData.businessWebsite,
           agreed_to_commission: agreed,
           status: "pending",
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Send notification to admin
+      await supabase.functions.invoke('send-order-notification', {
+        body: {
+          type: 'seller_application',
+          application: applicationData,
+        },
+      });
 
       toast({
         title: "Application Submitted",
@@ -375,6 +410,32 @@ By checking the box below, you confirm that you have read and agree to these ter
                       value={formData.businessWebsite}
                       onChange={(e) => handleInputChange("businessWebsite", e.target.value)}
                     />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="businessLogo">Business Logo or ID Card</Label>
+                    <Input
+                      id="businessLogo"
+                      type="file"
+                      accept="image/jpeg,image/png,image/jpg,application/pdf"
+                      onChange={(e) => handleFileChange("businessLogo", e.target.files?.[0] || null)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Upload your business logo or ID card (Max 5MB, JPG/PNG/PDF)
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="idCard">Additional Document</Label>
+                    <Input
+                      id="idCard"
+                      type="file"
+                      accept="image/jpeg,image/png,image/jpg,application/pdf"
+                      onChange={(e) => handleFileChange("idCard", e.target.files?.[0] || null)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Upload additional identification or business documents (Optional)
+                    </p>
                   </div>
                 </div>
 

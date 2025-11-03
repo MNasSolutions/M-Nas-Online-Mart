@@ -24,6 +24,21 @@ interface OrderNotificationRequest {
   transactionId?: string;
 }
 
+interface SellerApplicationNotification {
+  type: 'seller_application';
+  application: {
+    business_name: string;
+    brand_name: string;
+    owner_full_name: string;
+    email: string;
+    phone: string;
+    product_category: string;
+    country: string;
+    state: string;
+    city: string;
+  };
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -40,7 +55,52 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const orderData: OrderNotificationRequest = await req.json();
+    const requestData: OrderNotificationRequest | SellerApplicationNotification = await req.json();
+
+    // Check if this is a seller application notification
+    if ('type' in requestData && requestData.type === 'seller_application') {
+      const adminEmails = [
+        "mnassolutions007@gmail.com",
+        "mnassolutions@gmail.com",
+        "send2muhammadsaadahmad@gmail.com",
+      ];
+
+      for (const email of adminEmails) {
+        await resend.emails.send({
+          from: "MNAS Online Mart <onboarding@resend.dev>",
+          to: [email],
+          subject: `New Seller Application - ${requestData.application.business_name}`,
+          html: `
+            <h1>New Seller Application Received</h1>
+            <p>A new seller has applied to join M Nas Solutions Online Mart.</p>
+            <h2>Business Information</h2>
+            <ul>
+              <li><strong>Business Name:</strong> ${requestData.application.business_name}</li>
+              <li><strong>Brand Name:</strong> ${requestData.application.brand_name}</li>
+              <li><strong>Owner:</strong> ${requestData.application.owner_full_name}</li>
+              <li><strong>Email:</strong> ${requestData.application.email}</li>
+              <li><strong>Phone:</strong> ${requestData.application.phone}</li>
+              <li><strong>Category:</strong> ${requestData.application.product_category}</li>
+              <li><strong>Location:</strong> ${requestData.application.city}, ${requestData.application.state}, ${requestData.application.country}</li>
+            </ul>
+            <p>Please review this application in the admin dashboard.</p>
+          `,
+        });
+      }
+
+      console.log("Seller application notification sent successfully");
+
+      return new Response(
+        JSON.stringify({ success: true }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Handle order notification
+    const orderData = requestData as OrderNotificationRequest;
 
     const itemsHtml = orderData.items
       .map(
