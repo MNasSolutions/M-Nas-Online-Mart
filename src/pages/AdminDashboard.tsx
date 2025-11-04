@@ -518,7 +518,12 @@ export default function AdminDashboard() {
                 <CardTitle>Product Management</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">Product management coming soon...</p>
+                <p className="text-muted-foreground">
+                  Products are managed by sellers in their dashboard. Admins can view all products here and moderate as needed.
+                </p>
+                <Button className="mt-4" onClick={() => navigate("/seller-dashboard")}>
+                  Go to Seller Dashboard to Add Products
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
