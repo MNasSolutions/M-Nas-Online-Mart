@@ -421,6 +421,30 @@ export type Database = {
           },
         ]
       }
+      platform_wallet: {
+        Row: {
+          balance: number
+          id: string
+          total_commission: number
+          total_subscriptions: number
+          updated_at: string | null
+        }
+        Insert: {
+          balance?: number
+          id?: string
+          total_commission?: number
+          total_subscriptions?: number
+          updated_at?: string | null
+        }
+        Update: {
+          balance?: number
+          id?: string
+          total_commission?: number
+          total_subscriptions?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           created_at: string | null
@@ -647,6 +671,35 @@ export type Database = {
         }
         Relationships: []
       }
+      seller_followers: {
+        Row: {
+          created_at: string | null
+          id: string
+          seller_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          seller_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          seller_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seller_followers_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "seller_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seller_profiles: {
         Row: {
           account_number: string
@@ -656,6 +709,7 @@ export type Database = {
           business_name: string
           commission_rate: number
           created_at: string | null
+          follower_count: number | null
           id: string
           is_active: boolean | null
           total_commission: number | null
@@ -671,6 +725,7 @@ export type Database = {
           business_name: string
           commission_rate?: number
           created_at?: string | null
+          follower_count?: number | null
           id?: string
           is_active?: boolean | null
           total_commission?: number | null
@@ -686,6 +741,7 @@ export type Database = {
           business_name?: string
           commission_rate?: number
           created_at?: string | null
+          follower_count?: number | null
           id?: string
           is_active?: boolean | null
           total_commission?: number | null
@@ -699,6 +755,53 @@ export type Database = {
             columns: ["application_id"]
             isOneToOne: false
             referencedRelation: "seller_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      seller_subscriptions: {
+        Row: {
+          created_at: string | null
+          currency: string
+          end_date: string
+          id: string
+          payment_reference: string | null
+          seller_id: string
+          start_date: string
+          status: string
+          subscription_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string
+          end_date: string
+          id?: string
+          payment_reference?: string | null
+          seller_id: string
+          start_date?: string
+          status?: string
+          subscription_amount?: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string
+          end_date?: string
+          id?: string
+          payment_reference?: string | null
+          seller_id?: string
+          start_date?: string
+          status?: string
+          subscription_amount?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seller_subscriptions_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "seller_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -787,6 +890,36 @@ export type Database = {
         }
         Relationships: []
       }
+      site_visitors: {
+        Row: {
+          id: string
+          ip_address: string | null
+          page_url: string | null
+          referrer: string | null
+          user_agent: string | null
+          user_id: string | null
+          visited_at: string | null
+        }
+        Insert: {
+          id?: string
+          ip_address?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visited_at?: string | null
+        }
+        Update: {
+          id?: string
+          ip_address?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          visited_at?: string | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number
@@ -841,6 +974,33 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          reference: string | null
+          transaction_type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference?: string | null
+          transaction_type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference?: string | null
+          transaction_type?: string
         }
         Relationships: []
       }
