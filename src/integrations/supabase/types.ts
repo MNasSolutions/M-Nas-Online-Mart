@@ -330,14 +330,23 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string
+          discount_amount: number | null
+          discount_code: string | null
           id: string
+          notes: string | null
           order_number: string
-          payment_method: string
-          payment_status: string | null
+          order_status: Database["public"]["Enums"]["order_status_type"] | null
+          payment_method: Database["public"]["Enums"]["payment_method_type"]
+          payment_status:
+            | Database["public"]["Enums"]["payment_status_type"]
+            | null
           seller_amount: number | null
           seller_id: string | null
           shipping_address: string
+          shipping_address_id: string | null
+          shipping_fee: number | null
           status: string
+          tax_amount: number | null
           total_amount: number
           tracking_token: string | null
           transaction_id: string | null
@@ -350,14 +359,23 @@ export type Database = {
           customer_email: string
           customer_name: string
           customer_phone: string
+          discount_amount?: number | null
+          discount_code?: string | null
           id?: string
+          notes?: string | null
           order_number: string
-          payment_method: string
-          payment_status?: string | null
+          order_status?: Database["public"]["Enums"]["order_status_type"] | null
+          payment_method: Database["public"]["Enums"]["payment_method_type"]
+          payment_status?:
+            | Database["public"]["Enums"]["payment_status_type"]
+            | null
           seller_amount?: number | null
           seller_id?: string | null
           shipping_address: string
+          shipping_address_id?: string | null
+          shipping_fee?: number | null
           status?: string
+          tax_amount?: number | null
           total_amount: number
           tracking_token?: string | null
           transaction_id?: string | null
@@ -370,14 +388,23 @@ export type Database = {
           customer_email?: string
           customer_name?: string
           customer_phone?: string
+          discount_amount?: number | null
+          discount_code?: string | null
           id?: string
+          notes?: string | null
           order_number?: string
-          payment_method?: string
-          payment_status?: string | null
+          order_status?: Database["public"]["Enums"]["order_status_type"] | null
+          payment_method?: Database["public"]["Enums"]["payment_method_type"]
+          payment_status?:
+            | Database["public"]["Enums"]["payment_status_type"]
+            | null
           seller_amount?: number | null
           seller_id?: string | null
           shipping_address?: string
+          shipping_address_id?: string | null
+          shipping_fee?: number | null
           status?: string
+          tax_amount?: number | null
           total_amount?: number
           tracking_token?: string | null
           transaction_id?: string | null
@@ -676,6 +703,54 @@ export type Database = {
           },
         ]
       }
+      shipping_addresses: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          city: string
+          country: string
+          created_at: string | null
+          full_name: string
+          id: string
+          is_default: boolean | null
+          phone: string
+          postal_code: string | null
+          state: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          city: string
+          country?: string
+          created_at?: string | null
+          full_name: string
+          id?: string
+          is_default?: boolean | null
+          phone: string
+          postal_code?: string | null
+          state: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          city?: string
+          country?: string
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          is_default?: boolean | null
+          phone?: string
+          postal_code?: string | null
+          state?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       shipping_rates: {
         Row: {
           country: string
@@ -709,6 +784,42 @@ export type Database = {
           updated_at?: string | null
           weight_from?: number
           weight_to?: number
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: string
+          order_id: string
+          payment_data: Json | null
+          payment_method: Database["public"]["Enums"]["payment_method_type"]
+          payment_status: Database["public"]["Enums"]["payment_status_type"]
+          transaction_reference: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: string
+          order_id: string
+          payment_data?: Json | null
+          payment_method: Database["public"]["Enums"]["payment_method_type"]
+          payment_status?: Database["public"]["Enums"]["payment_status_type"]
+          transaction_reference?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          payment_data?: Json | null
+          payment_method?: Database["public"]["Enums"]["payment_method_type"]
+          payment_status?: Database["public"]["Enums"]["payment_status_type"]
+          transaction_reference?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -769,6 +880,20 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user" | "seller" | "super_admin"
+      order_status_type:
+        | "pending"
+        | "confirmed"
+        | "processing"
+        | "shipped"
+        | "delivered"
+        | "cancelled"
+      payment_method_type: "paystack" | "opay" | "moniepoint" | "bank_transfer"
+      payment_status_type:
+        | "pending"
+        | "processing"
+        | "completed"
+        | "failed"
+        | "refunded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -897,6 +1022,22 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user", "seller", "super_admin"],
+      order_status_type: [
+        "pending",
+        "confirmed",
+        "processing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ],
+      payment_method_type: ["paystack", "opay", "moniepoint", "bank_transfer"],
+      payment_status_type: [
+        "pending",
+        "processing",
+        "completed",
+        "failed",
+        "refunded",
+      ],
     },
   },
 } as const
