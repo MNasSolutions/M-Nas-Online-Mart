@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - M Nas Mart</title>
+  <style>
+    /* Simple styling for product grid */
+    #productsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px;
+    }
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product-card img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+    .product-card h3 {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+    .product-card p {
+      font-size: 16px;
+      color: green;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shop - M Nas Mart</h1>
+  <div id="productsContainer"></div>
+
+  <!-- Link to JS -->
+  <script src="script.js"></script>
+</body>
+</html>
