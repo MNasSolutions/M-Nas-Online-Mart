@@ -1,39 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M Nas Mart - Shop</title>
+
+  <style>
+    body {
+      background: #f7f7f7;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px;
+      background: #222;
+      color: #fff;
+      margin: 0;
+    }
+    #productsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .product-card h3 {
+      margin: 5px 0;
+      font-size: 18px;
+    }
+    .product-card p {
+      font-size: 16px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
 <body>
 
-  <div id="productsContainer"></div>
+<h1>Shop at M Nas Mart</h1>
 
-  <script>
-    const APP_ID = "6911ca72c30aaf028507d3da";
-    const API_KEY = "34257797-9b9a-41d5-8e9d-2756212cb490";
-    const url = "https://api.knack.com/v1/objects/object_1/records";
-
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "X-Knack-Application-Id": APP_ID,
-        "X-Knack-REST-API-Key": API_KEY,
-        "Content-Type": "application/json"
-      }
-    })
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById("productsContainer");
-      data.records.forEach(product => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <h3>${product.field_1}</h3>
-          <p>Price: ${product.field_2}</p>
-        `;
-        container.appendChild(div);
-      });
-    })
-    .catch(err => console.error(err));
-  </script>
 <div id="productsContainer"></div>
 
 <script>
-  // the full script goes here
+  const APP_ID = "6911ca72c30aaf028507d3da";
+  const API_KEY = "34257797-9b9a-41d5-8e9d-2756212cb490";
+  const url = "https://api.knack.com/v1/objects/object_1/records"; // ✅ CHANGE object_1 if needed
+
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Knack-Application-Id": APP_ID,
+      "X-Knack-REST-API-Key": API_KEY,
+      "Content-Type": "application/json"
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("productsContainer");
+
+    data.records.forEach(product => {
+      const name = product.field_1 || "Unnamed Product"; // ✅ CHANGE field_1
+      const price = product.field_2 || "₦0";             // ✅ CHANGE field_2
+      const image = product.field_3 || "https://via.placeholder.com/200"; // ✅ optional
+
+      const div = document.createElement("div");
+      div.classList.add("product-card");
+      div.innerHTML = `
+        <img src="${image}">
+        <h3>${name}</h3>
+        <p>₦${price}</p>
+      `;
+      container.appendChild(div);
+    });
+  })
+  .catch(err => console.error("Knack Fetch Error:", err));
 </script>
-</body>
 
 </body>
+</html>
