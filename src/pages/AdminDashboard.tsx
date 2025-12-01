@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Loader2, Package, DollarSign, ShoppingBag, Users, 
-  CheckCircle, XCircle, Eye 
+  CheckCircle, XCircle, Eye, Ban, Check, Trash2
 } from "lucide-react";
 import {
   Table,
@@ -31,6 +31,9 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { Switch } from "@/components/ui/switch";
+import { SellerManagementTab } from "@/components/admin/SellerManagementTab";
+import { ProductManagementTab } from "@/components/admin/ProductManagementTab";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -502,30 +505,11 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="sellers" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Seller Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Seller management coming soon...</p>
-              </CardContent>
-            </Card>
+            <SellerManagementTab />
           </TabsContent>
 
           <TabsContent value="products" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Product Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Products are managed by sellers in their dashboard. Admins can view all products here and moderate as needed.
-                </p>
-                <Button className="mt-4" onClick={() => navigate("/seller-dashboard")}>
-                  Go to Seller Dashboard to Add Products
-                </Button>
-              </CardContent>
-            </Card>
+            <ProductManagementTab />
           </TabsContent>
         </Tabs>
       </main>

@@ -14,6 +14,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus, Edit, Trash2, Package, DollarSign, ShoppingBag, TrendingUp } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { OrdersTab } from "@/components/seller/OrdersTab";
+import { EarningsTab } from "@/components/seller/EarningsTab";
 
 interface Product {
   id: string;
@@ -437,33 +439,11 @@ export default function SellerDashboard() {
           </TabsContent>
 
           <TabsContent value="orders">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Orders</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">Order management coming soon...</p>
-              </CardContent>
-            </Card>
+            <OrdersTab sellerId={sellerProfile.id} />
           </TabsContent>
 
           <TabsContent value="earnings">
-            <Card>
-              <CardHeader>
-                <CardTitle>Earnings & Commissions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-4 border rounded">
-                    <div>
-                      <p className="font-semibold">Commission Rate</p>
-                      <p className="text-sm text-muted-foreground">Platform fee on each sale</p>
-                    </div>
-                    <p className="text-2xl font-bold">15%</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <EarningsTab sellerId={sellerProfile.id} sellerProfile={sellerProfile} />
           </TabsContent>
         </Tabs>
       </main>
