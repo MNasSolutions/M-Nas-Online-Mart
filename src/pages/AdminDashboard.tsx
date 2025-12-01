@@ -34,6 +34,8 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { Switch } from "@/components/ui/switch";
 import { SellerManagementTab } from "@/components/admin/SellerManagementTab";
 import { ProductManagementTab } from "@/components/admin/ProductManagementTab";
+import { CommissionTrackingTab } from "@/components/admin/CommissionTrackingTab";
+import { UsersManagementTab } from "@/components/admin/UsersManagementTab";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -368,6 +370,8 @@ export default function AdminDashboard() {
               Seller Applications {stats.pendingApplications > 0 && `(${stats.pendingApplications})`}
             </TabsTrigger>
             <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="commission">Commission</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="sellers">Sellers</TabsTrigger>
             <TabsTrigger value="products">Products</TabsTrigger>
           </TabsList>
@@ -502,6 +506,14 @@ export default function AdminDashboard() {
                 </Table>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="commission" className="space-y-4">
+            <CommissionTrackingTab />
+          </TabsContent>
+
+          <TabsContent value="users" className="space-y-4">
+            <UsersManagementTab />
           </TabsContent>
 
           <TabsContent value="sellers" className="space-y-4">
