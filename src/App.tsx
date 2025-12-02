@@ -8,6 +8,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
+import NewAdminDashboard from "./pages/NewAdminDashboard";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -65,8 +66,9 @@ const App = () => (
               <Route path="/buyer-dashboard" element={<BuyerDashboard />} />
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin" element={<NewAdminDashboard />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/old" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
