@@ -1,1 +1,13 @@
 project_id = "qtzlturyendzmirvbofu"
+
+[functions.chat]
+verify_jwt = true
+
+[functions.send-newsletter-email]
+verify_jwt = false
+
+[functions.send-order-notification]
+verify_jwt = false
+
+[functions.process-order]
+verify_jwt = true
