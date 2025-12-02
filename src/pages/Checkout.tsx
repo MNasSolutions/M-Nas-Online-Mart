@@ -12,11 +12,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 
 export default function Checkout() {
-  const { cart, cartTotal } = useCart();
+  const { cart, cartTotal, clearCart } = useCart();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"bank_transfer" | "paystack">("paystack");
   const [formData, setFormData] = useState({
     // Customer Info
     firstName: "",
@@ -97,6 +101,16 @@ export default function Checkout() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to complete your purchase",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
     if (!validateForm()) {
       toast({
         title: "Please fix the errors",
@@ -109,25 +123,80 @@ export default function Checkout() {
     setLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Generate order number
-      const orderNumber = `ORD-${Date.now()}`;
-      
-      toast({
-        title: "Order placed successfully!",
-        description: `Your order #${orderNumber} has been confirmed.`,
+      let paymentReference: string | undefined;
+
+      // For Paystack payment, initialize payment
+      if (paymentMethod === "paystack") {
+        const { data: session } = await supabase.auth.getSession();
+        
+        const paystackResponse = await fetch('https://api.paystack.co/transaction/initialize', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_xxx'}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            amount: Math.round(total * 100), // Convert to kobo
+            callback_url: `${window.location.origin}/order-confirmation`,
+          }),
+        });
+
+        const paystackData = await paystackResponse.json();
+        
+        if (paystackData.status && paystackData.data.authorization_url) {
+          // Open Paystack payment page
+          window.location.href = paystackData.data.authorization_url;
+          return;
+        }
+      }
+
+      // Prepare order data
+      const orderData = {
+        customer_name: `${formData.firstName} ${formData.lastName}`,
+        customer_email: formData.email,
+        customer_phone: formData.phone,
+        shipping_address: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.country} ${formData.zipCode}`,
+        payment_method: paymentMethod,
+        payment_reference: paymentReference,
+        items: cart.map(item => ({
+          product_id: item.id,
+          product_name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        shipping_fee: shipping,
+        tax_amount: tax,
+        discount_amount: 0,
+        total_amount: total,
+      };
+
+      // Call edge function to process order
+      const { data: session } = await supabase.auth.getSession();
+      const { data, error } = await supabase.functions.invoke('process-order', {
+        body: orderData,
+        headers: {
+          Authorization: `Bearer ${session.session?.access_token}`,
+        },
       });
 
-      // Redirect to order confirmation
-      navigate(`/order-confirmation?orderNumber=${orderNumber}`, {
-        state: { items: cart, subtotal: subtotal }
-      });
-    } catch (error) {
+      if (error) throw error;
+
       toast({
-        title: "Payment failed",
-        description: "Please check your payment details and try again.",
+        title: "CONGRATULATIONS! 🎉",
+        description: `Your order #${data.order_number} has been placed successfully!`,
+      });
+
+      clearCart();
+
+      // Redirect to order confirmation
+      navigate(`/order-confirmation?orderNumber=${data.order_number}&trackingToken=${data.tracking_token}`);
+      
+    } catch (error: any) {
+      console.error('Checkout error:', error);
+      toast({
+        title: "Order failed",
+        description: error.message || "Please try again or contact support.",
         variant: "destructive"
       });
     } finally {
@@ -300,10 +369,26 @@ export default function Checkout() {
                   <CreditCard className="h-5 w-5 mr-2" />
                   Payment Method
                 </h2>
-                
-                {/* Bank Transfer Options */}
+
+                {/* Payment Method Selection */}
                 <div className="mb-6 space-y-4">
-                  <h3 className="text-lg font-medium">Bank Transfer Details</h3>
+                  <Label>Select Payment Method</Label>
+                  <Select value={paymentMethod} onValueChange={(value: any) => setPaymentMethod(value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="paystack">Pay with Paystack (Card/Bank)</SelectItem>
+                      <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {paymentMethod === "bank_transfer" && (
+                  <>
+                    {/* Bank Transfer Options */}
+                    <div className="mb-6 space-y-4">
+                      <h3 className="text-lg font-medium">Bank Transfer Details</h3>
                   
                   {/* Moniepoint Details */}
                   <div className="bg-muted p-4 rounded-lg">
@@ -335,73 +420,22 @@ export default function Checkout() {
                     </div>
                   </div>
 
+                      <Alert>
+                        <AlertDescription>
+                          After making payment, please confirm via WhatsApp and provide your transaction receipt.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  </>
+                )}
+
+                {paymentMethod === "paystack" && (
                   <Alert>
                     <AlertDescription>
-                      After making payment, please confirm via WhatsApp and provide your transaction receipt.
+                      You will be redirected to Paystack secure payment page to complete your payment.
                     </AlertDescription>
                   </Alert>
-                </div>
-
-                <Separator className="my-6" />
-
-                {/* Card Payment Option */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Or Pay with Card</h3>
-                  <div>
-                    <Label htmlFor="cardName">Name on Card *</Label>
-                    <Input
-                      id="cardName"
-                      value={formData.cardName}
-                      onChange={(e) => handleInputChange("cardName", e.target.value)}
-                      className={errors.cardName ? "border-destructive" : ""}
-                    />
-                    {errors.cardName && <p className="text-sm text-destructive mt-1">{errors.cardName}</p>}
-                  </div>
-                  <div>
-                    <Label htmlFor="cardNumber">Card Number *</Label>
-                    <Input
-                      id="cardNumber"
-                      placeholder="1234 5678 9012 3456"
-                      value={formData.cardNumber}
-                      onChange={(e) => handleInputChange("cardNumber", formatCardNumber(e.target.value))}
-                      maxLength={19}
-                      className={errors.cardNumber ? "border-destructive" : ""}
-                    />
-                    {errors.cardNumber && <p className="text-sm text-destructive mt-1">{errors.cardNumber}</p>}
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="expiryDate">Expiry Date *</Label>
-                      <Input
-                        id="expiryDate"
-                        placeholder="MM/YY"
-                        value={formData.expiryDate}
-                        onChange={(e) => {
-                          let value = e.target.value.replace(/\D/g, '');
-                          if (value.length >= 2) {
-                            value = value.substring(0, 2) + '/' + value.substring(2, 4);
-                          }
-                          handleInputChange("expiryDate", value);
-                        }}
-                        maxLength={5}
-                        className={errors.expiryDate ? "border-destructive" : ""}
-                      />
-                      {errors.expiryDate && <p className="text-sm text-destructive mt-1">{errors.expiryDate}</p>}
-                    </div>
-                    <div>
-                      <Label htmlFor="cvv">CVV *</Label>
-                      <Input
-                        id="cvv"
-                        placeholder="123"
-                        value={formData.cvv}
-                        onChange={(e) => handleInputChange("cvv", e.target.value.replace(/\D/g, ''))}
-                        maxLength={4}
-                        className={errors.cvv ? "border-destructive" : ""}
-                      />
-                      {errors.cvv && <p className="text-sm text-destructive mt-1">{errors.cvv}</p>}
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 <Alert className="mt-4">
                   <Lock className="h-4 w-4" />
