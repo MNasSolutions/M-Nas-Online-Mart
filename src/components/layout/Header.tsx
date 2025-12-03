@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Search, ShoppingCart, User, Menu, X, Heart, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogOut, Settings, LayoutDashboard } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -53,11 +54,39 @@ function CurrencySwitcher() {
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { user, signOut } = useAuth();
   const { cartCount } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
   const { searchQuery, setSearchQuery, handleSearch } = useSearch();
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        return;
+      }
+      try {
+        const { data: isSuperAdmin } = await supabase.rpc("has_role", {
+          _user_id: user.id,
+          _role: "super_admin",
+        });
+        if (isSuperAdmin) {
+          setIsAdmin(true);
+          return;
+        }
+        const { data: isAdminRole } = await supabase.rpc("has_role", {
+          _user_id: user.id,
+          _role: "admin",
+        });
+        setIsAdmin(!!isAdminRole);
+      } catch (error) {
+        setIsAdmin(false);
+      }
+    };
+    checkAdminRole();
+  }, [user]);
 
   const handleLogout = async () => {
     try {
@@ -179,6 +208,23 @@ export function Header() {
                       Wishlist
                     </Link>
                   </DropdownMenuItem>
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="cursor-pointer">
+                          <LayoutDashboard className="h-4 w-4 mr-2" />
+                          Admin Dashboard
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin/settings" className="cursor-pointer">
+                          <Settings className="h-4 w-4 mr-2" />
+                          Settings
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     onClick={() => setShowLogoutDialog(true)}
