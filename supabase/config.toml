@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.process-order]
 verify_jwt = true
+
+[functions.knack-proxy]
+verify_jwt = false
