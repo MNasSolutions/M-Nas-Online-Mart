@@ -29,6 +29,7 @@ import SellerDashboard from "./pages/SellerDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AdminSettings from "./pages/AdminSettings";
 import Chatbot from "@/components/Chatbot";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
@@ -68,6 +69,7 @@ const App = () => (
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<NewAdminDashboard />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/old" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
