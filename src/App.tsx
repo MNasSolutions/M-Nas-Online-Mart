@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import NewAdminDashboard from "./pages/NewAdminDashboard";
+import SuperAdminLogin from "./pages/SuperAdminLogin";
 import Auth from "./pages/Auth";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -68,6 +69,7 @@ const App = () => (
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/admin" element={<NewAdminDashboard />} />
+              <Route path="/admin/login" element={<SuperAdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/settings" element={<AdminSettings />} />
               <Route path="/admin/old" element={<Admin />} />

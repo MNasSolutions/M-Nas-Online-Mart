@@ -6,10 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import AdminLayout from "@/components/admin/AdminLayout";
+import DashboardWidgets from "@/components/admin/DashboardWidgets";
+import OrdersManagementTab from "@/components/admin/OrdersManagementTab";
+import PayoutsManagementTab from "@/components/admin/PayoutsManagementTab";
 
 interface UserProfile {
   id: string;
@@ -183,16 +186,12 @@ export default function NewAdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <AdminLayout>
+      <div className="p-6 space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">Manage users, sellers, and platform overview</p>
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-[hsl(220,9%,65%)]">Platform overview and management</p>
         </div>
-        <Button onClick={() => navigate('/admin')} variant="outline">
-          Old Dashboard
-        </Button>
-      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
