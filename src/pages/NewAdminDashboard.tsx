@@ -404,4 +404,4 @@ export default function NewAdminDashboard() {
         </CardContent>
       </Card>
     </div>
-}
+
