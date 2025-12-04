@@ -10,9 +10,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { AdminLayout } from "@/components/admin/AdminLayout";
-import DashboardWidgets from "@/components/admin/DashboardWidgets";
-import OrdersManagementTab from "@/components/admin/OrdersManagementTab";
-import PayoutsManagementTab from "@/components/admin/PayoutsManagementTab";
 
 interface UserProfile {
   id: string;
@@ -193,6 +190,7 @@ export default function NewAdminDashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {/* Total Users */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Users</CardTitle>
@@ -203,6 +201,7 @@ export default function NewAdminDashboard() {
             </CardContent>
           </Card>
 
+          {/* Sellers */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Sellers</CardTitle>
@@ -214,6 +213,7 @@ export default function NewAdminDashboard() {
             </CardContent>
           </Card>
 
+          {/* Buyers */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Buyers</CardTitle>
@@ -224,6 +224,7 @@ export default function NewAdminDashboard() {
             </CardContent>
           </Card>
 
+          {/* Orders */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
@@ -234,18 +235,18 @@ export default function NewAdminDashboard() {
             </CardContent>
           </Card>
 
+          {/* Revenue */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
-                ₦{stats.totalRevenue?.toLocaleString() || 0}
-              </div>
+              <div className="text-2xl font-bold">₦{stats.totalRevenue?.toLocaleString() || 0}</div>
             </CardContent>
           </Card>
 
+          {/* Growth */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Growth</CardTitle>
@@ -272,8 +273,137 @@ export default function NewAdminDashboard() {
                 <TabsTrigger value="buyers">Buyers ({stats.totalBuyers})</TabsTrigger>
               </TabsList>
 
+              {/* All Users Table */}
               <TabsContent value="all" className="space-y-4">
-                {/* All users table */}
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Role</TableHead>
+                      <TableHead>Seller Info</TableHead>
+                      <TableHead>Joined</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers().map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src={user.avatar_url || ""} />
+                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{user.full_name || "N/A"}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{user.email || "N/A"}</TableCell>
+                        <TableCell>{user.phone || "N/A"}</TableCell>
+                        <TableCell>{getRoleBadge(user.role)}</TableCell>
+                        <TableCell>
+                          {user.seller_info ? (
+                            <div className="space-y-1">
+                              <p className="text-sm font-medium">{user.seller_info.brand_name}</p>
+                              <p className="text-xs text-muted-foreground">{user.seller_info.business_name}</p>
+                              <div className="flex gap-2">
+                                <Badge variant={user.seller_info.is_active ? "default" : "secondary"} className="text-xs">
+                                  {user.seller_info.is_active ? "Active" : "Inactive"}
+                                </Badge>
+                                <span className="text-xs">₦{user.seller_info.total_sales?.toLocaleString() || 0}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </TableCell>
+                        <TableCell>{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </TabsContent>
 
+              {/* Sellers Table */}
               <TabsContent value="sellers" className="space-y-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Business</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Sales</TableHead>
+                      <TableHead>Followers</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers("sellers").map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src={user.avatar_url || ""} />
+                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{user.full_name || "N/A"}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{user.email || "N/A"}</TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{user.seller_info?.brand_name}</p>
+                            <p className="text-xs text-muted-foreground">{user.seller_info?.business_name}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={user.seller_info?.is_active ? "default" : "secondary"}>
+                            {user.seller_info?.is_active ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>₦{user.seller_info?.total_sales?.toLocaleString() || 0}</TableCell>
+                        <TableCell>{user.seller_info?.follower_count || 0}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
+
+              {/* Buyers Table */}
+              <TabsContent value="buyers" className="space-y-4">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Joined</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers("buyers").map((user) => (
+                      <TableRow key={user.id}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarImage src={user.avatar_url || ""} />
+                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{user.full_name || "N/A"}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>{user.email || "N/A"}</TableCell>
+                        <TableCell>{user.phone || "N/A"}</TableCell>
+                        <TableCell>{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
+    </AdminLayout>
+  );
+}
