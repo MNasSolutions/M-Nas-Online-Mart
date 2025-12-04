@@ -13,11 +13,11 @@ export default function SuperAdminLogin() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   // Email/Password login
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   // OTP login
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
@@ -26,62 +26,44 @@ export default function SuperAdminLogin() {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
-      
-      // Check if user has admin role
+
       const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user.id)
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user?.id)
         .single();
-      
-      if (roleError || !roleData || !['admin', 'super_admin'].includes(roleData.role)) {
+
+      if (roleError || !roleData || !["admin", "super_admin"].includes(roleData.role)) {
         await supabase.auth.signOut();
-        throw new Error('Access denied. Super Admin privileges required.');
+        throw new Error("Access denied. Super Admin privileges required.");
       }
-      
-      toast.success("Login successful!", {
-        description: "Welcome back, Super Admin"
-      });
-      navigate('/admin');
+
+      toast.success("Login successful!", { description: "Welcome back, Super Admin" });
+      navigate("/admin");
     } catch (error: any) {
-      toast.error("Login failed", {
-        description: error.message || "Invalid credentials"
-      });
+      toast.error("Login failed", { description: error.message || "Invalid credentials" });
     } finally {
       setLoading(false);
     }
   };
 
   const handleSendOTP = async () => {
-    if (!phone) {
-      toast.error("Please enter phone number");
-      return;
-    }
-    
+    if (!phone) return toast.error("Please enter phone number");
+
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        phone: phone.startsWith('+') ? phone : `+234${phone.replace(/^0/, '')}`,
+        phone: phone.startsWith("+") ? phone : `+234${phone.replace(/^0/, "")}`,
       });
-      
       if (error) throw error;
-      
+
       setOtpSent(true);
-      toast.success("OTP sent!", {
-        description: "Check your phone for the verification code"
-      });
+      toast.success("OTP sent! Check your phone for the code");
     } catch (error: any) {
-      toast.error("Failed to send OTP", {
-        description: error.message
-      });
+      toast.error("Failed to send OTP", { description: error.message });
     } finally {
       setLoading(false);
     }
@@ -90,71 +72,63 @@ export default function SuperAdminLogin() {
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
     try {
       const { data, error } = await supabase.auth.verifyOtp({
-        phone: phone.startsWith('+') ? phone : `+234${phone.replace(/^0/, '')}`,
+        phone: phone.startsWith("+") ? phone : `+234${phone.replace(/^0/, "")}`,
         token: otp,
-        type: 'sms',
+        type: "sms",
       });
-      
       if (error) throw error;
-      
-      // Check admin role
+
       const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', data.user?.id)
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user?.id)
         .single();
-      
-      if (roleError || !roleData || !['admin', 'super_admin'].includes(roleData.role)) {
+
+      if (roleError || !roleData || !["admin", "super_admin"].includes(roleData.role)) {
         await supabase.auth.signOut();
-        throw new Error('Access denied. Super Admin privileges required.');
+        throw new Error("Access denied. Super Admin privileges required.");
       }
-      
+
       toast.success("Login successful!");
-      navigate('/admin');
+      navigate("/admin");
     } catch (error: any) {
-      toast.error("Verification failed", {
-        description: error.message
-      });
+      toast.error("Verification failed", { description: error.message });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-[hsl(224,14%,4%)] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[hsl(224,14%,4%)] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background effects */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[hsl(200,100%,50%)] rounded-full blur-[128px] opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[hsl(185,84%,45%)] rounded-full blur-[128px] opacity-15 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[hsl(185,84%,45%)] rounded-full blur-[128px] opacity-15 animate-pulse" style={{ animationDelay: "1s" }}></div>
       </div>
-      
+
       <Card className="w-full max-w-md relative z-10 bg-[hsl(224,14%,7%)] border-[hsl(224,14%,15%)] shadow-2xl">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] flex items-center justify-center shadow-[0_0_30px_hsl(200,100%,50%,0.5)]">
             <Shield className="w-10 h-10 text-white" />
           </div>
-          <div>
-            <CardTitle className="text-2xl font-bold text-white">M Nas Online Mart</CardTitle>
-            <CardDescription className="text-[hsl(220,9%,55%)]">Super Admin Portal</CardDescription>
-          </div>
+          <CardTitle className="text-2xl font-bold text-white">M Nas Online Mart</CardTitle>
+          <CardDescription className="text-[hsl(220,9%,55%)]">Super Admin Portal</CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <Tabs defaultValue="email" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-[hsl(224,14%,10%)]">
               <TabsTrigger value="email" className="data-[state=active]:bg-[hsl(200,100%,50%)] data-[state=active]:text-white">
-                <Mail className="w-4 h-4 mr-2" />
-                Email
+                <Mail className="w-4 h-4 mr-2" /> Email
               </TabsTrigger>
               <TabsTrigger value="phone" className="data-[state=active]:bg-[hsl(200,100%,50%)] data-[state=active]:text-white">
-                <Phone className="w-4 h-4 mr-2" />
-                Phone OTP
+                <Phone className="w-4 h-4 mr-2" /> Phone OTP
               </TabsTrigger>
             </TabsList>
-            
+
+            {/* Email login */}
             <TabsContent value="email" className="mt-6">
               <form onSubmit={handleEmailLogin} className="space-y-4">
                 <div className="space-y-2">
@@ -172,7 +146,7 @@ export default function SuperAdminLogin() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-[hsl(220,9%,75%)]">Password</Label>
                   <div className="relative">
@@ -195,22 +169,15 @@ export default function SuperAdminLogin() {
                     </button>
                   </div>
                 </div>
-                
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] hover:from-[hsl(200,100%,45%)] hover:to-[hsl(185,84%,40%)] text-white shadow-[0_0_20px_hsl(200,100%,50%,0.4)] transition-all duration-300"
-                >
-                  {loading ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Shield className="w-4 h-4 mr-2" />
-                  )}
+
+                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] text-white">
+                  {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
                   Sign In
                 </Button>
               </form>
             </TabsContent>
-            
+
+            {/* Phone OTP login */}
             <TabsContent value="phone" className="mt-6">
               <form onSubmit={handleVerifyOTP} className="space-y-4">
                 <div className="space-y-2">
@@ -229,16 +196,10 @@ export default function SuperAdminLogin() {
                     />
                   </div>
                 </div>
-                
+
                 {!otpSent ? (
-                  <Button
-                    type="button"
-                    onClick={handleSendOTP}
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] hover:from-[hsl(200,100%,45%)] hover:to-[hsl(185,84%,40%)] text-white shadow-[0_0_20px_hsl(200,100%,50%,0.4)]"
-                  >
-                    {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                    Send OTP
+                  <Button type="button" onClick={handleSendOTP} disabled={loading} className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] text-white">
+                    {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null} Send OTP
                   </Button>
                 ) : (
                   <>
@@ -255,22 +216,12 @@ export default function SuperAdminLogin() {
                         required
                       />
                     </div>
-                    
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] hover:from-[hsl(200,100%,45%)] hover:to-[hsl(185,84%,40%)] text-white shadow-[0_0_20px_hsl(200,100%,50%,0.4)]"
-                    >
-                      {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />}
-                      Verify & Login
+
+                    <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-[hsl(200,100%,50%)] to-[hsl(185,84%,45%)] text-white">
+                      {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Shield className="w-4 h-4 mr-2" />} Verify & Login
                     </Button>
-                    
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => { setOtpSent(false); setOtp(''); }}
-                      className="w-full text-[hsl(200,100%,50%)] hover:text-[hsl(200,100%,60%)] hover:bg-[hsl(224,14%,12%)]"
-                    >
+
+                    <Button type="button" variant="ghost" onClick={() => { setOtpSent(false); setOtp(""); }} className="w-full text-[hsl(200,100%,50%)]">
                       Resend OTP
                     </Button>
                   </>
@@ -278,11 +229,9 @@ export default function SuperAdminLogin() {
               </form>
             </TabsContent>
           </Tabs>
-          
+
           <div className="mt-6 text-center">
-            <p className="text-[hsl(220,9%,45%)] text-sm">
-              Protected admin area. Unauthorized access is prohibited.
-            </p>
+            <p className="text-[hsl(220,9%,45%)] text-sm">Protected admin area. Unauthorized access is prohibited.</p>
           </div>
         </CardContent>
       </Card>
