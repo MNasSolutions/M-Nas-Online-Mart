@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-import AdminLayout from "@/components/admin/AdminLayout";
+import { AdminLayout } from "@/components/admin/AdminLayout";
 import DashboardWidgets from "@/components/admin/DashboardWidgets";
 import OrdersManagementTab from "@/components/admin/OrdersManagementTab";
 import PayoutsManagementTab from "@/components/admin/PayoutsManagementTab";
@@ -404,5 +404,6 @@ export default function NewAdminDashboard() {
         </CardContent>
       </Card>
     </div>
+      </AdminLayout>
   );
 }
