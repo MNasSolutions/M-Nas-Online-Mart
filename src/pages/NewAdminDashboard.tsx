@@ -31,7 +31,7 @@ interface UserProfile {
   };
 }
 
-export default function NewAdminDashboard (){
+export default function NewAdminDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -404,5 +404,5 @@ export default function NewAdminDashboard (){
         </CardContent>
       </Card>
     </div>
-);
-      }
+  );
+}
