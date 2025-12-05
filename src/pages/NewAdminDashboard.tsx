@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-import { AdminLayout } from "@/components/admin/AdminLayout";
+import AdminLayout from "@/components/admin/AdminLayout";
 
 interface UserProfile {
   id: string;
@@ -406,4 +406,5 @@ export default function NewAdminDashboard() {
       </div>
     </AdminLayout>
   );
+}
 
