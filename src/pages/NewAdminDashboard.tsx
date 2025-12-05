@@ -7,9 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
+import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import AdminLayout from "@/components/admin/AdminLayout";
+import EnhancedPayoutsTab from "@/components/admin/EnhancedPayoutsTab";
 
 interface UserProfile {
   id: string;

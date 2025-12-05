@@ -125,28 +125,48 @@ export default function Checkout() {
     try {
       let paymentReference: string | undefined;
 
-      // For Paystack payment, initialize payment
+      // For Paystack payment, initialize payment via secure edge function
       if (paymentMethod === "paystack") {
         const { data: session } = await supabase.auth.getSession();
         
-        const paystackResponse = await fetch('https://api.paystack.co/transaction/initialize', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_xxx'}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        // Use edge function to initialize payment securely (server-side)
+        const { data: paymentInit, error: paymentError } = await supabase.functions.invoke('initialize-payment', {
+          body: {
             email: formData.email,
-            amount: Math.round(total * 100), // Convert to kobo
+            amount: total,
             callback_url: `${window.location.origin}/order-confirmation`,
-          }),
+            metadata: {
+              customer_name: `${formData.firstName} ${formData.lastName}`,
+              customer_phone: formData.phone,
+            },
+          },
+          headers: {
+            Authorization: `Bearer ${session?.session?.access_token}`,
+          },
         });
 
-        const paystackData = await paystackResponse.json();
-        
-        if (paystackData.status && paystackData.data.authorization_url) {
-          // Open Paystack payment page
-          window.location.href = paystackData.data.authorization_url;
+        if (paymentError) {
+          throw new Error(paymentError.message || 'Payment initialization failed');
+        }
+
+        if (paymentInit?.authorization_url) {
+          // Store order data in sessionStorage to retrieve after payment
+          sessionStorage.setItem('pendingOrderData', JSON.stringify({
+            ...formData,
+            payment_reference: paymentInit.reference,
+            cart: cart.map(item => ({
+              product_id: item.id,
+              product_name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+            })),
+            shipping_fee: shipping,
+            tax_amount: tax,
+            total_amount: total,
+          }));
+          
+          // Redirect to Paystack payment page
+          window.location.href = paymentInit.authorization_url;
           return;
         }
       }

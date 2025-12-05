@@ -7,10 +7,16 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.send-order-notification]
-verify_jwt = false
+verify_jwt = true
 
 [functions.process-order]
 verify_jwt = true
 
 [functions.knack-proxy]
 verify_jwt = false
+
+[functions.initialize-payment]
+verify_jwt = true
+
+[functions.verify-bank-account]
+verify_jwt = true

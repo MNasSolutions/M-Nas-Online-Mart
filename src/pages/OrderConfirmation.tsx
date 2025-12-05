@@ -1,88 +1,166 @@
 import { useEffect, useState } from "react";
-import { CheckCircle, Download, Printer, ArrowLeft, Package, Truck } from "lucide-react";
+import { CheckCircle, Download, Printer, ArrowLeft, Package, Truck, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { useNavigate, useSearchParams, Link, useLocation } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-
-// Mock order data
-const orderData = {
-  orderNumber: "ORD-1672934567",
-  orderDate: new Date().toLocaleDateString(),
-  estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-  customer: {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567"
-  },
-  shippingAddress: {
-    street: "123 Main Street",
-    city: "New York",
-    state: "NY",
-    zipCode: "10001",
-    country: "United States"
-  },
-  items: [
-    {
-      id: 1,
-      name: "Premium Wireless Headphones",
-      price: 299.99,
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&q=80"
-    },
-    {
-      id: 2,
-      name: "Smart Fitness Watch",
-      price: 199.99,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&q=80"
-    }
-  ],
-  payment: {
-    subtotal: 799.97,
-    shipping: 0,
-    tax: 63.99,
-    total: 863.96,
-    method: "•••• •••• •••• 1234"
-  }
-};
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function OrderConfirmation() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [orderNumber, setOrderNumber] = useState("");
+  const { clearCart } = useCart();
+  const { user } = useAuth();
+  const { format } = useCurrency();
   const location = useLocation();
-
-  // Calculate order totals from location state or use default
-  const orderItems = (location.state as any)?.items ?? orderData.items;
-  const subtotal = (location.state as any)?.subtotal ?? orderData.payment.subtotal;
-  const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  
+  const [loading, setLoading] = useState(true);
+  const [orderNumber, setOrderNumber] = useState("");
+  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {
-    const orderNum = searchParams.get("orderNumber");
-    if (orderNum) {
-      setOrderNumber(orderNum);
-    } else {
-      setOrderNumber(orderData.orderNumber);
-    }
+    const processPaystackCallback = async () => {
+      const reference = searchParams.get("reference");
+      const trxref = searchParams.get("trxref");
+      const existingOrderNumber = searchParams.get("orderNumber");
+      
+      // If we have an existing order number, just display it
+      if (existingOrderNumber) {
+        setOrderNumber(existingOrderNumber);
+        await loadOrderDetails(existingOrderNumber);
+        setLoading(false);
+        return;
+      }
+
+      // Handle Paystack callback
+      if (reference || trxref) {
+        setProcessingPayment(true);
+        const paymentRef = reference || trxref;
+        
+        try {
+          // Get stored order data from session
+          const pendingOrderData = sessionStorage.getItem('pendingOrderData');
+          if (!pendingOrderData) {
+            toast({
+              title: "Error",
+              description: "Order data not found. Please try again.",
+              variant: "destructive"
+            });
+            navigate('/checkout');
+            return;
+          }
+
+          const orderData = JSON.parse(pendingOrderData);
+          
+          // Process the order with payment reference
+          const { data: session } = await supabase.auth.getSession();
+          const { data, error } = await supabase.functions.invoke('process-order', {
+            body: {
+              customer_name: `${orderData.firstName} ${orderData.lastName}`,
+              customer_email: orderData.email,
+              customer_phone: orderData.phone,
+              shipping_address: `${orderData.address}, ${orderData.city}, ${orderData.state}, ${orderData.country} ${orderData.zipCode}`,
+              payment_method: 'paystack',
+              payment_reference: paymentRef,
+              items: orderData.cart,
+              shipping_fee: orderData.shipping_fee,
+              tax_amount: orderData.tax_amount,
+              discount_amount: 0,
+              total_amount: orderData.total_amount,
+            },
+            headers: {
+              Authorization: `Bearer ${session?.session?.access_token}`,
+            },
+          });
+
+          if (error) {
+            throw new Error(error.message);
+          }
+
+          // Clear cart and session storage
+          clearCart();
+          sessionStorage.removeItem('pendingOrderData');
+
+          setOrderNumber(data.order_number);
+          await loadOrderDetails(data.order_number);
+
+          toast({
+            title: "🎉 CONGRATULATIONS!",
+            description: `Your order #${data.order_number} has been placed successfully!`,
+          });
+
+        } catch (error: any) {
+          console.error('Payment processing error:', error);
+          toast({
+            title: "Payment Failed",
+            description: error.message || "Payment verification failed. Please contact support.",
+            variant: "destructive"
+          });
+          navigate('/checkout');
+          return;
+        } finally {
+          setProcessingPayment(false);
+        }
+      }
+
+      setLoading(false);
+    };
+
+    processPaystackCallback();
   }, [searchParams]);
+
+  const loadOrderDetails = async (orderNum: string) => {
+    try {
+      const { data: order, error } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          order_items (*)
+        `)
+        .eq('order_number', orderNum)
+        .single();
+
+      if (!error && order) {
+        setOrderDetails(order);
+      }
+    } catch (error) {
+      console.error('Error loading order:', error);
+    }
+  };
 
   const handleDownloadReceipt = () => {
     toast({
       title: "Receipt Downloaded",
       description: "Your receipt has been downloaded successfully.",
     });
-    // In a real app, this would generate and download a PDF
   };
 
   const handlePrintReceipt = () => {
     window.print();
   };
+
+  if (loading || processingPayment) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">
+            {processingPayment ? "Processing Your Payment..." : "Loading Order..."}
+          </h2>
+          <p className="text-muted-foreground">Please wait while we confirm your order.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const estimatedDelivery = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString();
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,12 +169,12 @@ export default function OrderConfirmation() {
       <main className="container mx-auto px-4 py-8">
         {/* Success Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-success/10 rounded-full mb-6">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-success/10 rounded-full mb-6 animate-pulse">
             <CheckCircle className="h-10 w-10 text-success" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Order Confirmed!</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">🎉 CONGRATULATIONS!</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Thank you for your purchase. Your order has been successfully placed and you'll receive a confirmation email shortly.
+            Your order has been successfully placed. You'll receive a confirmation email and WhatsApp message shortly.
           </p>
         </div>
 
@@ -124,66 +202,75 @@ export default function OrderConfirmation() {
                   <h3 className="font-medium mb-2">Order Information</h3>
                   <div className="space-y-1 text-sm">
                     <p><span className="font-medium">Order Number:</span> {orderNumber}</p>
-                    <p><span className="font-medium">Order Date:</span> {orderData.orderDate}</p>
-                    <p><span className="font-medium">Payment Method:</span> {orderData.payment.method}</p>
+                    <p><span className="font-medium">Order Date:</span> {new Date().toLocaleDateString()}</p>
+                    <p><span className="font-medium">Payment Method:</span> {orderDetails?.payment_method === 'paystack' ? 'Paystack' : 'Bank Transfer'}</p>
+                    <p><span className="font-medium">Payment Status:</span> 
+                      <span className={`ml-2 px-2 py-1 rounded text-xs ${
+                        orderDetails?.payment_status === 'completed' 
+                          ? 'bg-success/20 text-success' 
+                          : 'bg-warning/20 text-warning'
+                      }`}>
+                        {orderDetails?.payment_status || 'Pending'}
+                      </span>
+                    </p>
                   </div>
                 </div>
                 
                 <div>
                   <h3 className="font-medium mb-2">Delivery Information</h3>
                   <div className="space-y-1 text-sm">
-                    <p><span className="font-medium">Estimated Delivery:</span> {orderData.estimatedDelivery}</p>
+                    <p><span className="font-medium">Estimated Delivery:</span> {estimatedDelivery}</p>
                     <p><span className="font-medium">Shipping Method:</span> Standard Shipping</p>
-                    <p><span className="font-medium">Tracking:</span> Will be provided via email</p>
+                    <p><span className="font-medium">Tracking:</span> Will be provided via email & WhatsApp</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Customer & Shipping Info */}
-            <div className="bg-card rounded-lg p-6 shadow-soft">
-              <h2 className="text-xl font-semibold mb-4">Customer & Shipping Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-medium mb-2">Contact Information</h3>
-                  <div className="space-y-1 text-sm">
-                    <p>{orderData.customer.name}</p>
-                    <p>{orderData.customer.email}</p>
-                    <p>{orderData.customer.phone}</p>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium mb-2">Shipping Address</h3>
-                  <div className="space-y-1 text-sm">
-                    <p>{orderData.shippingAddress.street}</p>
-                    <p>{orderData.shippingAddress.city}, {orderData.shippingAddress.state} {orderData.shippingAddress.zipCode}</p>
-                    <p>{orderData.shippingAddress.country}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Order Items */}
-            <div className="bg-card rounded-lg p-6 shadow-soft">
-              <h2 className="text-xl font-semibold mb-4">Order Items</h2>
-              <div className="space-y-4">
-                {orderItems.map((item: any) => (
-                  <div key={item.id} className="flex space-x-4 p-4 border rounded-lg">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-medium">{item.name}</h4>
-                      <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
-                      <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+            {orderDetails && (
+              <div className="bg-card rounded-lg p-6 shadow-soft">
+                <h2 className="text-xl font-semibold mb-4">Customer & Shipping Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-medium mb-2">Contact Information</h3>
+                    <div className="space-y-1 text-sm">
+                      <p>{orderDetails.customer_name}</p>
+                      <p>{orderDetails.customer_email}</p>
+                      <p>{orderDetails.customer_phone}</p>
                     </div>
                   </div>
-                ))}
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">Shipping Address</h3>
+                    <div className="space-y-1 text-sm">
+                      <p>{orderDetails.shipping_address}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Order Items */}
+            {orderDetails?.order_items && (
+              <div className="bg-card rounded-lg p-6 shadow-soft">
+                <h2 className="text-xl font-semibold mb-4">Order Items</h2>
+                <div className="space-y-4">
+                  {orderDetails.order_items.map((item: any) => (
+                    <div key={item.id} className="flex space-x-4 p-4 border rounded-lg">
+                      <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center">
+                        <Package className="h-8 w-8 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-medium">{item.product_name}</h4>
+                        <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
+                        <p className="text-sm font-medium">{format(item.price * item.quantity)}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
@@ -204,60 +291,64 @@ export default function OrderConfirmation() {
             <div className="bg-card rounded-lg p-6 shadow-soft">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  {shipping === 0 ? (
-                    <span className="text-success">Free</span>
-                  ) : (
-                    <span>${shipping.toFixed(2)}</span>
-                  )}
-                </div>
-                <div className="flex justify-between">
-                  <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
-                </div>
-                <Separator />
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total</span>
-                  <span className="text-price">${total.toFixed(2)}</span>
-                </div>
+                {orderDetails && (
+                  <>
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>{format(orderDetails.total_amount - orderDetails.shipping_fee - orderDetails.tax_amount)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Shipping</span>
+                      {orderDetails.shipping_fee === 0 ? (
+                        <span className="text-success">Free</span>
+                      ) : (
+                        <span>{format(orderDetails.shipping_fee)}</span>
+                      )}
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Tax</span>
+                      <span>{format(orderDetails.tax_amount)}</span>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between text-lg font-bold">
+                      <span>Total</span>
+                      <span className="text-price">{format(orderDetails.total_amount)}</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Next Steps */}
+            {/* Order Progress */}
             <div className="bg-card rounded-lg p-6 shadow-soft">
-              <h2 className="text-xl font-semibold mb-4">What's Next?</h2>
+              <h2 className="text-xl font-semibold mb-4">Order Progress</h2>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                  <div className="w-3 h-3 bg-success rounded-full mt-1"></div>
                   <div>
-                    <p className="font-medium text-sm">Order Confirmation</p>
-                    <p className="text-xs text-muted-foreground">You'll receive an email confirmation within 5 minutes</p>
+                    <p className="font-medium text-sm text-success">Order Confirmed</p>
+                    <p className="text-xs text-muted-foreground">Your order has been placed</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full mt-2"></div>
+                  <div className="w-3 h-3 bg-muted-foreground rounded-full mt-1"></div>
                   <div>
                     <p className="font-medium text-sm">Processing</p>
-                    <p className="text-xs text-muted-foreground">We'll prepare your order within 1-2 business days</p>
+                    <p className="text-xs text-muted-foreground">1-2 business days</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full mt-2"></div>
+                  <div className="w-3 h-3 bg-muted-foreground rounded-full mt-1"></div>
                   <div>
-                    <p className="font-medium text-sm">Shipping</p>
-                    <p className="text-xs text-muted-foreground">Tracking information will be sent via email</p>
+                    <p className="font-medium text-sm">Shipped</p>
+                    <p className="text-xs text-muted-foreground">Tracking info via email</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-muted-foreground rounded-full mt-2"></div>
+                  <div className="w-3 h-3 bg-muted-foreground rounded-full mt-1"></div>
                   <div>
-                    <p className="font-medium text-sm">Delivery</p>
-                    <p className="text-xs text-muted-foreground">Expected delivery: {orderData.estimatedDelivery}</p>
+                    <p className="font-medium text-sm">Delivered</p>
+                    <p className="text-xs text-muted-foreground">Expected: {estimatedDelivery}</p>
                   </div>
                 </div>
               </div>
@@ -268,11 +359,16 @@ export default function OrderConfirmation() {
               <h2 className="text-xl font-semibold mb-4">Need Help?</h2>
               <div className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  Have questions about your order? Our customer support team is here to help.
+                  Have questions? Contact us via WhatsApp or email.
                 </p>
                 <div className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full">
-                    Contact Support
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full"
+                    onClick={() => window.open('https://wa.me/2347069036157', '_blank')}
+                  >
+                    WhatsApp Support
                   </Button>
                   <Button variant="outline" size="sm" className="w-full" onClick={() => navigate(`/track-order?order=${orderNumber}`)}>
                     <Truck className="h-4 w-4 mr-2" />
