@@ -3,8 +3,13 @@ import { MessageCircle, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Msg { role: "user" | "assistant"; content: string }
+
+// Security constants - must match server-side
+const MAX_MESSAGE_LENGTH = 1000;
+const MAX_MESSAGES = 20;
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -13,20 +18,49 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: "Hi! I'm your shopping assistant. How can I help?" }
   ]);
+  const { toast } = useToast();
 
   const send = async () => {
-    if (!input.trim()) return;
-    const next = [...messages, { role: "user", content: input } as Msg];
+    const trimmedInput = input.trim();
+    if (!trimmedInput) return;
+    
+    // Client-side validation
+    if (trimmedInput.length > MAX_MESSAGE_LENGTH) {
+      toast({
+        title: "Message too long",
+        description: `Please keep your message under ${MAX_MESSAGE_LENGTH} characters.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Limit conversation history
+    const recentMessages = messages.slice(-MAX_MESSAGES + 1);
+    const next = [...recentMessages, { role: "user", content: trimmedInput } as Msg];
+    
     setMessages(next);
     setInput("");
     setLoading(true);
+    
     try {
       const { data, error } = await supabase.functions.invoke("chat", { body: { messages: next } });
-      if (error) throw error;
-      const reply = (data as any)?.reply || "Sorry, I couldn't respond.";
+      
+      if (error) {
+        // Handle rate limiting
+        if (error.message?.includes("429") || error.message?.includes("Too many")) {
+          toast({
+            title: "Please slow down",
+            description: "Too many messages. Please wait a moment before trying again.",
+            variant: "destructive",
+          });
+          return;
+        }
+        throw error;
+      }
+      
+      const reply = (data as { reply?: string })?.reply || "Sorry, I couldn't respond.";
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-    } catch (e: any) {
-      console.error(e);
+    } catch {
       setMessages((prev) => [...prev, { role: "assistant", content: "There was an error. Please try again." }]);
     } finally {
       setLoading(false);

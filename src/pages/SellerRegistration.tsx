@@ -53,17 +53,15 @@ export default function SellerRegistration() {
     const fileExt = file.name.split('.').pop();
     const fileName = `${user!.id}/${folder}/${Date.now()}.${fileExt}`;
     
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from('seller-documents')
       .upload(fileName, file);
     
     if (error) throw error;
     
-    const { data: { publicUrl } } = supabase.storage
-      .from('seller-documents')
-      .getPublicUrl(fileName);
-    
-    return publicUrl;
+    // Return the file path instead of public URL for private bucket
+    // Admin will use signed URLs to view these documents
+    return fileName;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

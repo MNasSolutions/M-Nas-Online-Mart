@@ -37,6 +37,81 @@ import { ProductManagementTab } from "@/components/admin/ProductManagementTab";
 import { CommissionTrackingTab } from "@/components/admin/CommissionTrackingTab";
 import { UsersManagementTab } from "@/components/admin/UsersManagementTab";
 
+// Component for viewing seller documents with signed URLs
+function DocumentsSection({ 
+  application, 
+  documentUrls, 
+  setDocumentUrls 
+}: { 
+  application: any; 
+  documentUrls: { logo?: string; idCard?: string };
+  setDocumentUrls: (urls: { logo?: string; idCard?: string }) => void;
+}) {
+  const [loadingDocs, setLoadingDocs] = useState(false);
+  const { toast } = useToast();
+
+  const viewDocument = async (path: string, type: 'logo' | 'idCard') => {
+    if (!path) return;
+    
+    // If it's already a full URL (old format), just open it
+    if (path.startsWith('http')) {
+      window.open(path, '_blank');
+      return;
+    }
+    
+    // Generate signed URL for private bucket
+    setLoadingDocs(true);
+    try {
+      const { data, error } = await supabase.storage
+        .from('seller-documents')
+        .createSignedUrl(path, 3600); // 1 hour expiry
+      
+      if (error) throw error;
+      
+      if (data?.signedUrl) {
+        setDocumentUrls({ ...documentUrls, [type]: data.signedUrl });
+        window.open(data.signedUrl, '_blank');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load document. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingDocs(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <h3 className="text-lg font-semibold">Documents</h3>
+      <div className="flex gap-4">
+        {application.business_logo_url && (
+          <Button 
+            variant="outline" 
+            onClick={() => viewDocument(application.business_logo_url, 'logo')}
+            disabled={loadingDocs}
+          >
+            {loadingDocs ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            View Business Logo/ID
+          </Button>
+        )}
+        {application.id_card_url && (
+          <Button 
+            variant="outline" 
+            onClick={() => viewDocument(application.id_card_url, 'idCard')}
+            disabled={loadingDocs}
+          >
+            {loadingDocs ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            View Additional Document
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -57,6 +132,7 @@ export default function AdminDashboard() {
   const [selectedApplication, setSelectedApplication] = useState<any>(null);
   const [rejectionReason, setRejectionReason] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
+  const [documentUrls, setDocumentUrls] = useState<{ logo?: string; idCard?: string }>({});
 
   useEffect(() => {
     if (!user) {
@@ -631,25 +707,11 @@ export default function AdminDashboard() {
 
               {/* Documents */}
               {(selectedApplication.business_logo_url || selectedApplication.id_card_url) && (
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">Documents</h3>
-                  <div className="flex gap-4">
-                    {selectedApplication.business_logo_url && (
-                      <Button variant="outline" asChild>
-                        <a href={selectedApplication.business_logo_url} target="_blank" rel="noopener noreferrer">
-                          View Business Logo/ID
-                        </a>
-                      </Button>
-                    )}
-                    {selectedApplication.id_card_url && (
-                      <Button variant="outline" asChild>
-                        <a href={selectedApplication.id_card_url} target="_blank" rel="noopener noreferrer">
-                          View Additional Document
-                        </a>
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                <DocumentsSection 
+                  application={selectedApplication} 
+                  documentUrls={documentUrls}
+                  setDocumentUrls={setDocumentUrls}
+                />
               )}
 
               {/* Actions */}
