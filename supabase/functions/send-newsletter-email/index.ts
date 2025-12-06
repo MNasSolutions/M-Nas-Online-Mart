@@ -9,6 +9,39 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Rate limiting constants
+const MAX_REQUESTS_PER_MINUTE = 5;
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(clientId: string): boolean {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute window
+  
+  const record = rateLimitMap.get(clientId);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(clientId, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+  
+  if (record.count >= MAX_REQUESTS_PER_MINUTE) {
+    return false;
+  }
+  
+  record.count++;
+  return true;
+}
+
+// Clean up old rate limit entries periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of rateLimitMap.entries()) {
+    if (now > value.resetTime) {
+      rateLimitMap.delete(key);
+    }
+  }
+}, 60 * 1000);
+
 interface NewsletterRequest {
   email: string;
 }
@@ -20,13 +53,34 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    // Note: This function remains public for newsletter signup (no JWT verification)
-    // However, basic validation is added to prevent abuse
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+                     req.headers.get("cf-connecting-ip") || 
+                     "unknown";
+    
+    // Check rate limit
+    if (!checkRateLimit(clientIP)) {
+      console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please wait a moment before trying again." }), 
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const { email }: NewsletterRequest = await req.json();
     
     // Basic email validation
     if (!email || typeof email !== 'string' || !email.includes('@') || email.length > 255) {
-      console.error("Invalid email format:", email);
+      console.error("Invalid email format");
+      return new Response(
+        JSON.stringify({ error: "Invalid email address format" }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
       return new Response(
         JSON.stringify({ error: "Invalid email address format" }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -34,17 +88,17 @@ const handler = async (req: Request): Promise<Response> => {
     }
     
     // Prevent obviously fake/disposable emails (basic check)
-    const disposableDomains = ['tempmail.com', 'throwaway.email', '10minutemail.com'];
+    const disposableDomains = ['tempmail.com', 'throwaway.email', '10minutemail.com', 'guerrillamail.com', 'mailinator.com', 'fakeinbox.com'];
     const emailDomain = email.split('@')[1]?.toLowerCase();
     if (disposableDomains.includes(emailDomain)) {
-      console.error("Disposable email blocked:", email);
+      console.warn("Disposable email blocked");
       return new Response(
         JSON.stringify({ error: "Disposable email addresses are not allowed" }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log("Newsletter subscription request for:", email);
+    console.log("Newsletter subscription request received");
 
     const emailResponse = await resend.emails.send({
       from: "M Nas Online Mart <onboarding@resend.dev>",
@@ -75,7 +129,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           <div style="text-align: center; margin-top: 30px;">
             <p style="color: #666;">Start shopping now and enjoy great deals!</p>
-            <a href="${Deno.env.get('SUPABASE_URL')?.replace('https://qtzlturyendzmirvbofu.supabase.co', 'your-domain.com') || 'https://your-domain.com'}" 
+            <a href="https://lovable.dev" 
                style="display: inline-block; background: #FF6B35; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 10px 0;">
               Shop Now
             </a>
@@ -91,7 +145,7 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Newsletter email sent successfully:", emailResponse);
+    console.log("Newsletter email sent successfully");
 
     return new Response(JSON.stringify({ 
       success: true, 
@@ -105,12 +159,11 @@ const handler = async (req: Request): Promise<Response> => {
       },
     });
   } catch (error: any) {
-    console.error("Error in newsletter subscription:", error);
+    console.error("Error in newsletter subscription:", error.message || "Unknown error");
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: "Failed to send newsletter email. Please try again.",
-        details: error.message 
+        error: "Failed to send newsletter email. Please try again."
       }),
       {
         status: 500,
