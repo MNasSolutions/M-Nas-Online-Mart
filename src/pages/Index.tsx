@@ -23,4 +23,3 @@ const Index = () => {
 };
 
 export default Index;
-<script type="module" src="script.js"></script>
