@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import robot from "@/assets/mr robot.jpg";
 import me from "@/assets/20231202_093235-removebg-preview.png";
+import bro from "@/assets/mem1.jpg";
 
 const teamMembers = [
   {
@@ -17,9 +18,9 @@ const teamMembers = [
   },
   {
     id: 2,
-    name: "Michael Chen",
+    name: "Salim Sa'ad Ahmad",
     role: "Head of Technology",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+    image: bro,
     bio: "Building cutting-edge solutions for seamless shopping experiences",
     email: "michael@mnas.com",
     linkedin: "#",
