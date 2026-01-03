@@ -1,14 +1,15 @@
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import robot from "@/assets/mr robot.jpg";
+import robot from "@/assets/20231202_093235-removebg-preview";
+import Me from "@/assets/mr robot.jpg";
 
 const teamMembers = [
   {
     id: 1,
     name: "Muhammad Sa'ad Ahmad",
     role: "CEO & Founder",
-    image: "20231202_093235-removebg-preview",
+    image: "Me,
     bio: "Leading with vision and passion for e-commerce innovation",
     email: "mnasonlinemart@gmail.com",
     linkedin: "#",
