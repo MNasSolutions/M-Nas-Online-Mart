@@ -6,11 +6,11 @@ import robot from "@/assets/mr robot.jpg";
 const teamMembers = [
   {
     id: 1,
-    name: "Sarah Johnson",
+    name: "Muhammad Sa'ad Ahmad",
     role: "CEO & Founder",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
     bio: "Leading with vision and passion for e-commerce innovation",
-    email: "sarah@mnas.com",
+    email: "mnasonlinemart@gmail.com",
     linkedin: "#",
     twitter: "#"
   },
