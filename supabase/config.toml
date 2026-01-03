@@ -9,6 +9,9 @@ verify_jwt = false
 [functions.send-order-notification]
 verify_jwt = true
 
+[functions.send-registration-notification]
+verify_jwt = false
+
 [functions.process-order]
 verify_jwt = true
 

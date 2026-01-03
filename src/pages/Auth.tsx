@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, User, Store, ShoppingBag } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, User, Store, ShoppingBag, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { PhoneOTPLogin } from "@/components/auth/PhoneOTPLogin";
 
 type AuthMode = "login" | "buyer-signup" | "seller-signup" | "choose";
 
@@ -260,9 +262,127 @@ export default function Auth() {
         </div>
 
         <div className="bg-card rounded-2xl shadow-strong p-8 border">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name (signup only) */}
-            {mode !== "login" && (
+          {mode === "login" ? (
+            <Tabs defaultValue="email" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="email" className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Email
+                </TabsTrigger>
+                <TabsTrigger value="phone" className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
+                  Phone OTP
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="email">
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Email */}
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Admin Login Toggle */}
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="adminLogin"
+                      checked={isAdminLogin}
+                      onChange={(e) => setIsAdminLogin(e.target.checked)}
+                      className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
+                    />
+                    <Label htmlFor="adminLogin" className="text-sm">
+                      Login as Administrator
+                    </Label>
+                  </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  {/* Submit Button */}
+                  <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                    {loading ? "Please wait..." : "Sign In"}
+                  </Button>
+
+                  {/* Forgot Password */}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleForgotPassword}
+                    className="w-full text-muted-foreground hover:text-primary"
+                  >
+                    Forgot your password?
+                  </Button>
+                </form>
+              </TabsContent>
+              
+              <TabsContent value="phone">
+                <PhoneOTPLogin 
+                  onSuccess={() => navigate(isAdminLogin ? "/admin" : "/")}
+                  isAdminLogin={isAdminLogin}
+                />
+                
+                {/* Admin Login Toggle for Phone */}
+                <div className="flex items-center space-x-2 mt-4 pt-4 border-t">
+                  <input
+                    type="checkbox"
+                    id="adminLoginPhone"
+                    checked={isAdminLogin}
+                    onChange={(e) => setIsAdminLogin(e.target.checked)}
+                    className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
+                  />
+                  <Label htmlFor="adminLoginPhone" className="text-sm">
+                    Login as Administrator
+                  </Label>
+                </div>
+              </TabsContent>
+            </Tabs>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Full Name */}
               <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name</Label>
                 <div className="relative">
@@ -278,53 +398,51 @@ export default function Auth() {
                   />
                 </div>
               </div>
-            )}
 
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
-                  required
-                />
+              {/* Email */}
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10"
-                  required
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </Button>
+              {/* Password */}
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 pr-10"
+                    required
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                </div>
               </div>
-            </div>
 
-            {/* Confirm Password (signup only) */}
-            {mode !== "login" && (
+              {/* Confirm Password */}
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <div className="relative">
@@ -340,74 +458,43 @@ export default function Auth() {
                   />
                 </div>
               </div>
-            )}
 
-            {/* Admin Login Toggle */}
-            {mode === "login" && (
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="adminLogin"
-                  checked={isAdminLogin}
-                  onChange={(e) => setIsAdminLogin(e.target.checked)}
-                  className="h-4 w-4 text-primary focus:ring-primary border-input rounded"
-                />
-                <Label htmlFor="adminLogin" className="text-sm">
-                  Login as Administrator
-                </Label>
-              </div>
-            )}
+              {/* Seller Info */}
+              {mode === "seller-signup" && (
+                <div className="bg-secondary/10 rounded-lg p-4 text-sm space-y-2">
+                  <p className="font-medium text-secondary">Seller Benefits:</p>
+                  <ul className="text-muted-foreground space-y-1 text-xs">
+                    <li>• Create your own storefront</li>
+                    <li>• List unlimited products</li>
+                    <li>• Track orders and earnings</li>
+                    <li>• 15% platform commission on sales</li>
+                    <li>• ₦3,000 monthly subscription</li>
+                  </ul>
+                </div>
+              )}
 
-            {/* Seller Info */}
-            {mode === "seller-signup" && (
-              <div className="bg-secondary/10 rounded-lg p-4 text-sm space-y-2">
-                <p className="font-medium text-secondary">Seller Benefits:</p>
-                <ul className="text-muted-foreground space-y-1 text-xs">
-                  <li>• Create your own storefront</li>
-                  <li>• List unlimited products</li>
-                  <li>• Track orders and earnings</li>
-                  <li>• 15% platform commission on sales</li>
-                  <li>• ₦3,000 monthly subscription</li>
-                </ul>
-              </div>
-            )}
+              {/* Error Message */}
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
 
-            {/* Error Message */}
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {/* Submit Button */}
-            <Button 
-              type="submit" 
-              className={`w-full ${mode === "seller-signup" ? "bg-secondary hover:bg-secondary/90" : ""}`}
-              size="lg"
-              disabled={loading}
-            >
-              {loading 
-                ? "Please wait..." 
-                : mode === "login" 
-                  ? "Sign In" 
+              {/* Submit Button */}
+              <Button 
+                type="submit" 
+                className={`w-full ${mode === "seller-signup" ? "bg-secondary hover:bg-secondary/90" : ""}`}
+                size="lg"
+                disabled={loading}
+              >
+                {loading 
+                  ? "Please wait..." 
                   : mode === "seller-signup"
                     ? "Create Seller Account"
                     : "Create Buyer Account"}
-            </Button>
-
-            {/* Forgot Password */}
-            {mode === "login" && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={handleForgotPassword}
-                className="w-full text-muted-foreground hover:text-primary"
-              >
-                Forgot your password?
               </Button>
-            )}
-          </form>
+            </form>
+          )}
 
           {/* Toggle Mode */}
           <div className="mt-6 text-center">
