@@ -8,13 +8,13 @@ export default function About() {
       <Header />
       <main className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8">About MNAS Online Mart</h1>
+          <h1 className="text-4xl font-bold mb-8">About M Nas Online Mart</h1>
           
           <Card className="mb-8">
             <CardContent className="pt-6">
               <h2 className="text-2xl font-semibold mb-4">Our Story</h2>
               <p className="text-muted-foreground mb-4">
-                MNAS Online Mart is your trusted destination for quality products at competitive prices. 
+                M Nas Online Mart is your trusted destination for quality products at competitive prices. 
                 We started with a simple mission: to make online shopping easy, secure, and enjoyable for everyone.
               </p>
               <p className="text-muted-foreground mb-4">
