@@ -1,8 +1,8 @@
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import me from "@/assets/src/assets/20231202_093235-removebg-preview.png";
 import robot from "@/assets/mr robot.jpg";
+import me from "@/assets/20231202_093235-removebg-preview.png";
 
 const teamMembers = [
   {
