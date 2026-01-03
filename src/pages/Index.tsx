@@ -5,6 +5,8 @@ import { CategoriesSection } from "@/components/sections/CategoriesSection";
 import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
 import { TeamSection } from "@/components/sections/TeamSection";
 import { Footer } from "@/components/layout/Footer";
+import { FlashSales } from "@/components/sections/FlashSales";
+import { RecentlyViewed } from "@/components/sections/RecentlyViewed";
 
 const Index = () => {
   return (
@@ -12,9 +14,11 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <FlashSales />
         <HeroBanner />
         <CategoriesSection />
         <FeaturedProducts />
+        <RecentlyViewed />
         <TeamSection />
       </main>
       <Footer />
