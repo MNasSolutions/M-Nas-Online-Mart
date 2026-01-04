@@ -32,7 +32,7 @@ const teamMembers = [
     role: "Customer Success Manager",
     image: robot,
     bio: "Ensuring every customer has an exceptional shopping journey",
-    email: "abba adam<aawgr146070@gmail.com",
+    email: "aawgr146070@gmail.com",
     linkedin: "https://www.linkedin.com/in/abdullahi-adamu-581894376/",
     twitter: "https://x.com/AbbaA67604"
   }
