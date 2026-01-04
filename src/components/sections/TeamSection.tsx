@@ -13,8 +13,8 @@ const teamMembers = [
     image: me,
     bio: "Leading with vision and passion for e-commerce innovation",
     email: "mnasonlinemart@gmail.com",
-    linkedin: "#",
-    twitter: "#"
+    linkedin: "https://www.linkedin.com/in/mnassolutions/",
+    twitter: "https://x.com/Muhamma25772152"
   },
   {
     id: 2,
@@ -23,8 +23,8 @@ const teamMembers = [
     image: bro,
     bio: "Building cutting-edge solutions for seamless shopping experiences",
     email: "michael@mnas.com",
-    linkedin: "#",
-    twitter: "#"
+    linkedin: "https://www.linkedin.com/in/reachsalim/",
+    twitter: "https://x.com/reach_salim"
   },
   {
     id: 3,
@@ -33,8 +33,8 @@ const teamMembers = [
     image: robot,
     bio: "Ensuring every customer has an exceptional shopping journey",
     email: "emily@mnas.com",
-    linkedin: "#",
-    twitter: "#"
+    linkedin: "https://www.linkedin.com/in/abdullahi-adamu-581894376/",
+    twitter: "https://x.com/AbbaA67604"
   }
 ];
 
