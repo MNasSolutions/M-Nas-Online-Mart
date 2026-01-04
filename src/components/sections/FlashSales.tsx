@@ -95,31 +95,31 @@ export function FlashSales() {
   if (loading || flashSales.length === 0) return null;
 
   return (
-    <section className="py-12 bg-gradient-to-r from-secondary/10 via-background to-secondary/10">
+    <section className="py-8 sm:py-12 bg-gradient-to-r from-secondary/10 via-background to-secondary/10">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-secondary/20 text-secondary animate-pulse">
-              <Flame className="h-6 w-6" />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 rounded-full bg-secondary/20 text-secondary animate-pulse">
+              <Flame className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Flash Sales</h2>
-              <p className="text-sm text-muted-foreground">
+              <h2 className="text-xl sm:text-2xl font-bold">Flash Sales</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Limited time offers - Don't miss out!
               </p>
             </div>
           </div>
           <Link to="/products?sale=true">
-            <Button variant="outline" className="group">
+            <Button variant="outline" size="sm" className="group w-full sm:w-auto">
               View All Deals
-              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
         </div>
 
         {/* Flash Sale Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {flashSales.map((sale) => (
             <Link key={sale.id} to={`/product/${sale.product_id}`}>
               <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
@@ -134,30 +134,30 @@ export function FlashSales() {
                       />
                     )}
                     {/* Discount Badge */}
-                    <Badge className="absolute top-2 left-2 bg-secondary text-secondary-foreground">
+                    <Badge className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-secondary text-secondary-foreground text-[10px] sm:text-xs">
                       -{sale.discount_percentage}%
                     </Badge>
                   </div>
 
                   {/* Content */}
-                  <div className="p-3 space-y-2">
+                  <div className="p-2 sm:p-3 space-y-1.5 sm:space-y-2">
                     {/* Timer */}
-                    <div className="flex items-center gap-1 text-xs text-secondary font-mono bg-secondary/10 rounded px-2 py-1">
-                      <Timer className="h-3 w-3" />
+                    <div className="flex items-center gap-1 text-[10px] sm:text-xs text-secondary font-mono bg-secondary/10 rounded px-1.5 py-0.5 sm:px-2 sm:py-1">
+                      <Timer className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       <span>{timeLeft[sale.id] || "Loading..."}</span>
                     </div>
 
                     {/* Product Name */}
-                    <p className="text-sm font-medium line-clamp-1">
+                    <p className="text-xs sm:text-sm font-medium line-clamp-1">
                       {sale.product?.name || "Product"}
                     </p>
 
                     {/* Prices */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-secondary">
+                    <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                      <span className="text-sm sm:text-lg font-bold text-secondary">
                         {format(sale.sale_price)}
                       </span>
-                      <span className="text-xs text-muted-foreground line-through">
+                      <span className="text-[10px] sm:text-xs text-muted-foreground line-through">
                         {format(sale.original_price)}
                       </span>
                     </div>

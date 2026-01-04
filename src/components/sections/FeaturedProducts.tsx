@@ -38,25 +38,25 @@ export function FeaturedProducts() {
     });
   };
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-12 sm:py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 animate-fade-in">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-in">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Featured Products
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
             Handpicked products that our customers love the most
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {products.map((product, index) => (
             <div 
               key={product.id}
               className="group animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 product-card-hover">
+              <div className="bg-card rounded-xl sm:rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 product-card-hover">
                 {/* Product Image */}
                 <div className="relative aspect-square overflow-hidden">
                   <img 
@@ -67,25 +67,25 @@ export function FeaturedProducts() {
                   
                   {/* Badge */}
                   {product.badge && (
-                    <div className={`absolute top-3 left-3 ${product.badgeColor} text-white text-xs font-medium px-2 py-1 rounded-full`}>
+                    <div className={`absolute top-2 left-2 sm:top-3 sm:left-3 ${product.badgeColor} text-white text-[10px] sm:text-xs font-medium px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full`}>
                       {product.badge}
                     </div>
                   )}
                   
-                  {/* Wishlist Button */}
-                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  {/* Wishlist Button - Always visible on mobile */}
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="bg-white/90 hover:bg-white"
+                      className="h-7 w-7 sm:h-9 sm:w-9 bg-white/90 hover:bg-white"
                       onClick={() => handleWishlist(product.name)}
                     >
-                      <Heart className="h-4 w-4" />
+                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                   
-                  {/* Action Buttons */}
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
+                  {/* Action Buttons - Hidden on mobile, shown on hover for desktop */}
+                  <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">
                     <Button 
                       variant="cta" 
                       size="sm" 
@@ -107,36 +107,49 @@ export function FeaturedProducts() {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-4 space-y-3">
-                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-3">
+                  <h3 className="font-semibold text-sm sm:text-lg group-hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2">
                     {product.name}
                   </h3>
                   
                   {/* Rating */}
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
                         <Star 
                           key={i} 
-                          className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
+                          className={`h-3 w-3 sm:h-4 sm:w-4 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      {product.rating} ({product.reviews})
+                    <span className="text-[10px] sm:text-sm text-muted-foreground">
+                      ({product.reviews})
                     </span>
                   </div>
                   
                   {/* Price */}
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-price">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
+                    <span className="text-base sm:text-xl font-bold text-price">
                       ${product.price}
                     </span>
                     {product.originalPrice && (
-                      <span className="text-sm text-muted-foreground line-through">
+                      <span className="text-[10px] sm:text-sm text-muted-foreground line-through">
                         ${product.originalPrice}
                       </span>
                     )}
+                  </div>
+
+                  {/* Mobile-only Add to Cart Button */}
+                  <div className="pt-2 sm:hidden">
+                    <Button 
+                      variant="cta" 
+                      size="sm" 
+                      className="w-full text-xs h-8"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <ShoppingCart className="h-3 w-3 mr-1" />
+                      Add to Cart
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -144,7 +157,7 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <Button variant="outline" size="lg" asChild>
             <Link to="/products">
               View All Products

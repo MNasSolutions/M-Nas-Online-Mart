@@ -110,12 +110,12 @@ export default function ProductDetail() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <main className="container mx-auto px-4 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* Product Images */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Main Image */}
-            <div className="aspect-square rounded-2xl overflow-hidden bg-muted">
+            <div className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden bg-muted">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
@@ -124,12 +124,12 @@ export default function ProductDetail() {
             </div>
             
             {/* Thumbnail Images */}
-            <div className="flex space-x-4">
+            <div className="flex space-x-2 sm:space-x-4 overflow-x-auto pb-2">
               {product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`aspect-square w-20 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`aspect-square w-16 sm:w-20 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
                     selectedImage === index 
                       ? 'border-primary shadow-medium' 
                       : 'border-transparent hover:border-muted-foreground'
@@ -146,30 +146,30 @@ export default function ProductDetail() {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Title and Rating */}
             <div>
-              <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">{product.name}</h1>
               
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star 
                       key={i} 
-                      className={`h-5 w-5 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
+                      className={`h-4 w-4 sm:h-5 sm:w-5 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
                     />
                   ))}
-                  <span className="ml-2 text-sm font-medium">{product.rating}</span>
+                  <span className="ml-2 text-xs sm:text-sm font-medium">{product.rating}</span>
                 </div>
-                <span className="text-sm text-muted-foreground">({product.reviews} reviews)</span>
+                <span className="text-xs sm:text-sm text-muted-foreground">({product.reviews} reviews)</span>
               </div>
             </div>
 
             {/* Price */}
-            <div className="flex items-center space-x-4">
-              <span className="text-3xl font-bold text-price">{format(product.price)}</span>
-              <span className="text-xl text-muted-foreground line-through">{format(product.originalPrice)}</span>
-              <Badge variant="secondary" className="text-sm font-semibold">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+              <span className="text-2xl sm:text-3xl font-bold text-price">{format(product.price)}</span>
+              <span className="text-lg sm:text-xl text-muted-foreground line-through">{format(product.originalPrice)}</span>
+              <Badge variant="secondary" className="text-xs sm:text-sm font-semibold">
                 {discountPercentage}% OFF
               </Badge>
             </div>
@@ -177,7 +177,7 @@ export default function ProductDetail() {
             {/* Stock Status */}
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-success rounded-full"></div>
-              <span className="text-sm text-success font-medium">
+              <span className="text-xs sm:text-sm text-success font-medium">
                 {product.stock} items in stock
               </span>
             </div>
@@ -186,44 +186,46 @@ export default function ProductDetail() {
 
             {/* Quantity Selector */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <span className="font-medium">Quantity:</span>
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <span className="text-sm sm:text-base font-medium">Quantity:</span>
                 <div className="flex items-center border rounded-lg">
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="h-8 w-8 sm:h-10 sm:w-10"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
                   >
-                    <Minus className="h-4 w-4" />
+                    <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
-                  <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
+                  <span className="px-3 sm:px-4 py-1 sm:py-2 min-w-[2.5rem] sm:min-w-[3rem] text-center text-sm sm:text-base">{quantity}</span>
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="h-8 w-8 sm:h-10 sm:w-10"
                     onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                     disabled={quantity >= product.stock}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <Button
                   variant="outline"
                   size="lg"
                   onClick={handleAddToCart}
-                  className="flex-1"
+                  className="flex-1 h-11 sm:h-12"
                 >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                   Add to Cart
                 </Button>
                 <Button
                   size="lg"
                   onClick={handleBuyNow}
-                  className="flex-1"
+                  className="flex-1 h-11 sm:h-12"
                 >
                   Buy Now
                 </Button>
@@ -231,9 +233,9 @@ export default function ProductDetail() {
                   variant="outline"
                   size="icon"
                   onClick={handleWishlist}
-                  className={isWishlisted ? 'text-red-500 border-red-500' : ''}
+                  className={`h-11 w-11 sm:h-12 sm:w-12 flex-shrink-0 ${isWishlisted ? 'text-red-500 border-red-500' : ''}`}
                 >
-                  <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                  <Heart className={`h-4 w-4 sm:h-5 sm:w-5 ${isWishlisted ? 'fill-current' : ''}`} />
                 </Button>
               </div>
             </div>
@@ -241,50 +243,50 @@ export default function ProductDetail() {
             <Separator />
 
             {/* Features */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Key Features</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold">Key Features</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
                 {product.features.map((feature, index) => (
                   <div key={index} className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span className="text-sm">{feature}</span>
+                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-primary rounded-full flex-shrink-0"></div>
+                    <span className="text-xs sm:text-sm">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-4 py-4">
-              <div className="flex flex-col items-center text-center space-y-2">
-                <Shield className="h-8 w-8 text-primary" />
-                <span className="text-xs font-medium">2 Year Warranty</span>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 py-3 sm:py-4">
+              <div className="flex flex-col items-center text-center space-y-1 sm:space-y-2">
+                <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                <span className="text-[10px] sm:text-xs font-medium">2 Year Warranty</span>
               </div>
-              <div className="flex flex-col items-center text-center space-y-2">
-                <Truck className="h-8 w-8 text-primary" />
-                <span className="text-xs font-medium">Free Shipping</span>
+              <div className="flex flex-col items-center text-center space-y-1 sm:space-y-2">
+                <Truck className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                <span className="text-[10px] sm:text-xs font-medium">Free Shipping</span>
               </div>
-              <div className="flex flex-col items-center text-center space-y-2">
-                <RefreshCw className="h-8 w-8 text-primary" />
-                <span className="text-xs font-medium">30-Day Returns</span>
+              <div className="flex flex-col items-center text-center space-y-1 sm:space-y-2">
+                <RefreshCw className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+                <span className="text-[10px] sm:text-xs font-medium">30-Day Returns</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Product Description & Specifications */}
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="mt-10 sm:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           <div>
-            <h2 className="text-2xl font-bold mb-4">Description</h2>
-            <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Description</h2>
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{product.description}</p>
           </div>
           
           <div>
-            <h2 className="text-2xl font-bold mb-4">Specifications</h2>
-            <div className="space-y-3">
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Specifications</h2>
+            <div className="space-y-2 sm:space-y-3">
               {Object.entries(product.specifications).map(([key, value]) => (
-                <div key={key} className="flex justify-between py-2 border-b border-muted">
-                  <span className="font-medium">{key}</span>
-                  <span className="text-muted-foreground">{value}</span>
+                <div key={key} className="flex justify-between py-1.5 sm:py-2 border-b border-muted">
+                  <span className="text-sm sm:text-base font-medium">{key}</span>
+                  <span className="text-sm sm:text-base text-muted-foreground">{value}</span>
                 </div>
               ))}
             </div>

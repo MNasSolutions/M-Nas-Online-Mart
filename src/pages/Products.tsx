@@ -87,28 +87,30 @@ export default function Products() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 sm:py-8">
         {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">
             {searchQuery ? `Search Results for "${searchQuery}"` : 'All Products'}
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
             Showing {filteredProducts.length} products
           </p>
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap gap-4 mb-8 justify-center">
+        <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-8 justify-center">
           {categories.map((category) => (
             <Button
               key={category.id}
               variant={selectedCategory === category.id ? "default" : "outline"}
               onClick={() => handleCategoryChange(category.id)}
-              className="flex items-center gap-2"
+              size="sm"
+              className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
             >
-              {category.name}
-              <span className="bg-muted text-muted-foreground px-2 py-1 rounded-full text-xs">
+              <span className="hidden sm:inline">{category.name}</span>
+              <span className="sm:hidden">{category.name.split(' ')[0]}</span>
+              <span className="bg-muted text-muted-foreground px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-[10px] sm:text-xs">
                 {category.count}
               </span>
             </Button>
@@ -116,14 +118,14 @@ export default function Products() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {filteredProducts.map((product, index) => (
             <div 
               key={product.id}
               className="group animate-fade-in"
               style={{ animationDelay: `${index * 0.05}s` }}
             >
-              <div className="bg-card rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 product-card-hover">
+              <div className="bg-card rounded-xl sm:rounded-2xl overflow-hidden shadow-soft hover:shadow-strong transition-all duration-300 product-card-hover">
                 {/* Product Image */}
                 <div className="relative aspect-square overflow-hidden">
                   <img 
@@ -134,25 +136,25 @@ export default function Products() {
                   
                   {/* Badge */}
                   {product.badge && (
-                    <div className={`absolute top-3 left-3 ${product.badgeColor} text-white text-xs font-medium px-2 py-1 rounded-full`}>
+                    <div className={`absolute top-2 left-2 sm:top-3 sm:left-3 ${product.badgeColor} text-white text-[10px] sm:text-xs font-medium px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full`}>
                       {product.badge}
                     </div>
                   )}
                   
-                  {/* Wishlist Button */}
-                  <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  {/* Wishlist Button - Always visible on mobile */}
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                     <Button 
                       size="icon" 
                       variant="ghost" 
-                      className="bg-white/90 hover:bg-white"
+                      className="h-7 w-7 sm:h-9 sm:w-9 bg-white/90 hover:bg-white"
                       onClick={() => handleWishlist(product)}
                     >
-                      <Heart className="h-4 w-4" />
+                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </Button>
                   </div>
                   
-                  {/* Action Buttons */}
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
+                  {/* Action Buttons - Hidden on mobile */}
+                  <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">
                     <Button 
                       variant="cta" 
                       size="sm" 
@@ -174,40 +176,53 @@ export default function Products() {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-4 space-y-3">
-                  <h3 className="font-semibold text-lg group-hover:text-primary transition-colors line-clamp-2">
+                <div className="p-3 sm:p-4 space-y-1.5 sm:space-y-3">
+                  <h3 className="font-semibold text-sm sm:text-lg group-hover:text-primary transition-colors line-clamp-1 sm:line-clamp-2">
                     {product.name}
                   </h3>
                   
-                  <p className="text-sm text-muted-foreground line-clamp-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1 sm:line-clamp-2 hidden sm:block">
                     {product.description}
                   </p>
                   
                   {/* Rating */}
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
                         <Star 
                           key={i} 
-                          className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
+                          className={`h-3 w-3 sm:h-4 sm:w-4 ${i < Math.floor(product.rating) ? 'text-rating fill-current' : 'text-muted-foreground'}`}
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      {product.rating} ({product.reviews})
+                    <span className="text-[10px] sm:text-sm text-muted-foreground">
+                      ({product.reviews})
                     </span>
                   </div>
                   
                   {/* Price */}
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-price">
+                  <div className="flex items-center space-x-1 sm:space-x-2">
+                    <span className="text-base sm:text-xl font-bold text-price">
                       ${product.price}
                     </span>
                     {product.originalPrice && (
-                      <span className="text-sm text-muted-foreground line-through">
+                      <span className="text-[10px] sm:text-sm text-muted-foreground line-through">
                         ${product.originalPrice}
                       </span>
                     )}
+                  </div>
+
+                  {/* Mobile-only Add to Cart Button */}
+                  <div className="pt-2 sm:hidden">
+                    <Button 
+                      variant="cta" 
+                      size="sm" 
+                      className="w-full text-xs h-8"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <ShoppingCart className="h-3 w-3 mr-1" />
+                      Add to Cart
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -217,10 +232,10 @@ export default function Products() {
 
         {/* No Results */}
         {filteredProducts.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-semibold mb-2">No products found</h3>
-            <p className="text-muted-foreground mb-4">
+          <div className="text-center py-12 sm:py-16">
+            <div className="text-5xl sm:text-6xl mb-3 sm:mb-4">🔍</div>
+            <h3 className="text-xl sm:text-2xl font-semibold mb-2">No products found</h3>
+            <p className="text-sm sm:text-base text-muted-foreground mb-4">
               Try adjusting your search or filter criteria
             </p>
             <Button onClick={() => {
