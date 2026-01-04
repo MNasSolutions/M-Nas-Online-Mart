@@ -64,22 +64,22 @@ export function Footer() {
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.facebook.com/profile.php?id=100093238822550" target="_blank" rel="noopener noreferrer">
                   <Facebook className="h-4 w-4" />
                 </a>
               </Button>
               <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://x.com/Muhamma25772152" target="_blank" rel="noopener noreferrer">
                   <Twitter className="h-4 w-4" />
                 </a>
               </Button>
               <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.instagram.com/m_nas_solutions/" target="_blank" rel="noopener noreferrer">
                   <Instagram className="h-4 w-4" />
                 </a>
               </Button>
               <Button variant="ghost" size="icon" className="hover:text-primary" asChild>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://www.youtube.com/@MNasSolutions" target="_blank" rel="noopener noreferrer">
                   <Youtube className="h-4 w-4" />
                 </a>
               </Button>
