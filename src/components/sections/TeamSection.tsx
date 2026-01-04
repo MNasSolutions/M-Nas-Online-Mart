@@ -22,7 +22,7 @@ const teamMembers = [
     role: "Head of Technology",
     image: bro,
     bio: "Building cutting-edge solutions for seamless shopping experiences",
-    email: "michael@mnas.com",
+    email: "reachsalim1@gmail.com",
     linkedin: "https://www.linkedin.com/in/reachsalim/",
     twitter: "https://x.com/reach_salim"
   },
@@ -32,7 +32,7 @@ const teamMembers = [
     role: "Customer Success Manager",
     image: robot,
     bio: "Ensuring every customer has an exceptional shopping journey",
-    email: "emily@mnas.com",
+    email: "abba adam<aawgr146070@gmail.com",
     linkedin: "https://www.linkedin.com/in/abdullahi-adamu-581894376/",
     twitter: "https://x.com/AbbaA67604"
   }
