@@ -40,16 +40,16 @@ const teamMembers = [
 
 export function TeamSection() {
   return (
-    <section className="py-16 bg-muted/30">
+    <section className="py-12 sm:py-16 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Meet Our Team</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Meet Our Team</h2>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
             Dedicated professionals working together to bring you the best shopping experience
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {teamMembers.map((member) => (
             <Card key={member.id} className="overflow-hidden hover-lift">
               <div className="aspect-square overflow-hidden">
@@ -59,25 +59,25 @@ export function TeamSection() {
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                 />
               </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-                <p className="text-primary font-medium mb-3">{member.role}</p>
-                <p className="text-sm text-muted-foreground mb-4">{member.bio}</p>
+              <CardContent className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-bold mb-1">{member.name}</h3>
+                <p className="text-sm sm:text-base text-primary font-medium mb-2 sm:mb-3">{member.role}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">{member.bio}</p>
                 
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" asChild>
+                  <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
                     <a href={`mailto:${member.email}`} aria-label="Email">
-                      <Mail className="h-4 w-4" />
+                      <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="icon" asChild>
+                  <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
                     <a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                      <Linkedin className="h-4 w-4" />
+                      <Linkedin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="icon" asChild>
+                  <Button variant="outline" size="icon" className="h-8 w-8 sm:h-10 sm:w-10" asChild>
                     <a href={member.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                      <Twitter className="h-4 w-4" />
+                      <Twitter className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </a>
                   </Button>
                 </div>
