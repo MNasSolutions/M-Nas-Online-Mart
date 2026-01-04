@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, ShoppingCart, User, Menu, X, Heart, LogOut, Settings, LayoutDashboard } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogOut, Settings, LayoutDashboard, Sun, Moon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSearch } from "@/hooks/useSearch";
 import {
@@ -60,6 +61,7 @@ export function Header() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { searchQuery, setSearchQuery, handleSearch } = useSearch();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const checkAdminRole = async () => {
@@ -161,7 +163,22 @@ export function Header() {
           </div>
 
           {/* Action Icons */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            {/* Theme Toggle */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={toggleTheme}
+              className="h-9 w-9"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? (
+                <Moon className="h-5 w-5" />
+              ) : (
+                <Sun className="h-5 w-5" />
+              )}
+            </Button>
+            
             {/* Currency selector */}
             <CurrencySwitcher />
             <Button variant="ghost" size="icon" className="relative hidden sm:flex">
