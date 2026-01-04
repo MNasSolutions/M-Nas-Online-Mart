@@ -1,7 +1,7 @@
 import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import robot from "@/assets/mr robot.jpg";
+import robot from "@/assets/abdullahi.jpeg";
 import me from "@/assets/GITHUB.png";
 import bro from "@/assets/mem1.jpg";
 
