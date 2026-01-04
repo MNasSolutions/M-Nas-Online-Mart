@@ -2,7 +2,7 @@ import { Mail, Linkedin, Twitter } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import robot from "@/assets/abdullahi.jpeg";
-import me from "@/assets/GITHUB.png";
+import me from "@/assets/pop.png";
 import bro from "@/assets/mem1.jpg";
 
 const teamMembers = [
