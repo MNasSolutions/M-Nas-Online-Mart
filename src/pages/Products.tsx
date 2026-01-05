@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -8,6 +8,7 @@ import { products, getProductsByCategory, searchProducts, Product } from "@/data
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useWishlist } from "@/hooks/useWishlist";
 import { useNavigate } from "react-router-dom";
 
 
@@ -27,6 +28,7 @@ export default function Products() {
   const { toast } = useToast();
   const { addToCart } = useCart();
   const { format } = useCurrency();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -137,6 +139,17 @@ export default function Products() {
                     </div>
                   )}
                   
+                  {/* Wishlist Button */}
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className={`h-7 w-7 sm:h-9 sm:w-9 bg-background/90 hover:bg-background ${isInWishlist(product.id) ? 'text-red-500' : 'text-foreground'}`}
+                      onClick={() => toggleWishlist(product.id, product.name)}
+                    >
+                      <Heart className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+                    </Button>
+                  </div>
                   
                   {/* Action Buttons - Hidden on mobile */}
                   <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">
