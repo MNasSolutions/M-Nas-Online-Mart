@@ -139,16 +139,24 @@ export function FeaturedProducts() {
                     )}
                   </div>
 
-                  {/* Mobile-only Add to Cart Button */}
-                  <div className="pt-2 sm:hidden">
+                  {/* Mobile-only Action Buttons */}
+                  <div className="pt-2 sm:hidden flex gap-2">
                     <Button 
                       variant="cta" 
                       size="sm" 
-                      className="w-full text-xs h-8"
+                      className="flex-1 text-xs h-8"
+                      onClick={() => handleBuyNow(product)}
+                    >
+                      Buy Now
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 text-xs h-8"
                       onClick={() => handleAddToCart(product)}
                     >
                       <ShoppingCart className="h-3 w-3 mr-1" />
-                      Add to Cart
+                      Add
                     </Button>
                   </div>
                 </div>
