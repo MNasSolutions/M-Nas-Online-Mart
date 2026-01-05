@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { products, getProductsByCategory, searchProducts, Product } from "@/data/products";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { useNavigate } from "react-router-dom";
 
 
@@ -25,6 +26,7 @@ export default function Products() {
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const { toast } = useToast();
   const { addToCart } = useCart();
+  const { format } = useCurrency();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -203,11 +205,11 @@ export default function Products() {
                   {/* Price */}
                   <div className="flex items-center space-x-1 sm:space-x-2">
                     <span className="text-base sm:text-xl font-bold text-price">
-                      ${product.price}
+                      {format(product.price)}
                     </span>
                     {product.originalPrice && (
                       <span className="text-[10px] sm:text-sm text-muted-foreground line-through">
-                        ${product.originalPrice}
+                        {format(product.originalPrice)}
                       </span>
                     )}
                   </div>

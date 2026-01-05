@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { products as allProducts, Product } from "@/data/products";
 
 // Featured products pulled from the global catalog to keep IDs consistent
@@ -13,6 +14,7 @@ export function FeaturedProducts() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { format } = useCurrency();
 
   const handleAddToCart = (product: typeof products[0]) => {
     addToCart({
@@ -130,11 +132,11 @@ export function FeaturedProducts() {
                   {/* Price */}
                   <div className="flex items-center space-x-1 sm:space-x-2">
                     <span className="text-base sm:text-xl font-bold text-price">
-                      ${product.price}
+                      {format(product.price)}
                     </span>
                     {product.originalPrice && (
                       <span className="text-[10px] sm:text-sm text-muted-foreground line-through">
-                        ${product.originalPrice}
+                        {format(product.originalPrice)}
                       </span>
                     )}
                   </div>
