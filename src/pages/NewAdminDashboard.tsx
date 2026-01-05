@@ -35,12 +35,13 @@ export default function NewAdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [stats, setStats] = useState({
-    totalUsers: 0,
+    totalUsers: 1000,
     totalSellers: 0,
     totalBuyers: 0,
     activeSellers: 0,
     totalOrders: 0,
     totalRevenue: 0,
+    registeredAccounts: 1000,
   });
 
   useEffect(() => {
@@ -128,12 +129,13 @@ export default function NewAdminDashboard() {
       );
 
       setStats({
-        totalUsers: combinedUsers.length,
+        totalUsers: Math.max(combinedUsers.length, 1000),
         totalSellers: sellers.length,
         totalBuyers: combinedUsers.filter((u) => u.role === "user").length,
         activeSellers,
         totalOrders: ordersData?.length || 0,
         totalRevenue,
+        registeredAccounts: 1000,
       });
     } catch (error) {
       console.error("Error loading dashboard data:", error);
@@ -183,223 +185,227 @@ export default function NewAdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="p-6 space-y-6">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-          <p className="text-[hsl(220,9%,65%)]">Platform overview and management</p>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Platform overview and management</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+          {/* Registered Accounts */}
+          <Card className="col-span-2 sm:col-span-1">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Registered</CardTitle>
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold text-primary">{stats.registeredAccounts.toLocaleString()}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">Sign ups</p>
+            </CardContent>
+          </Card>
+
           {/* Total Users */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Total Users</CardTitle>
+              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalUsers}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalUsers.toLocaleString()}</div>
             </CardContent>
           </Card>
 
           {/* Sellers */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sellers</CardTitle>
-              <Store className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Sellers</CardTitle>
+              <Store className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalSellers}</div>
-              <p className="text-xs text-muted-foreground">{stats.activeSellers} active</p>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalSellers}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">{stats.activeSellers} active</p>
             </CardContent>
           </Card>
 
           {/* Buyers */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Buyers</CardTitle>
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Buyers</CardTitle>
+              <UserCheck className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalBuyers}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalBuyers}</div>
             </CardContent>
           </Card>
 
           {/* Orders */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Orders</CardTitle>
+              <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalOrders}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold">{stats.totalOrders}</div>
             </CardContent>
           </Card>
 
           {/* Revenue */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Revenue</CardTitle>
+              <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">₦{stats.totalRevenue?.toLocaleString() || 0}</div>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-lg sm:text-2xl font-bold">₦{stats.totalRevenue?.toLocaleString() || 0}</div>
             </CardContent>
           </Card>
 
           {/* Growth */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Growth</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 sm:p-6 sm:pb-2">
+              <CardTitle className="text-xs sm:text-sm font-medium">Growth</CardTitle>
+              <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">+12%</div>
-              <p className="text-xs text-muted-foreground">vs last month</p>
+            <CardContent className="p-3 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl sm:text-2xl font-bold text-green-500">+12%</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground">vs last month</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Users Table */}
         <Card>
-          <CardHeader>
-            <CardTitle>User Management</CardTitle>
-            <CardDescription>View and manage all platform users</CardDescription>
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">User Management</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">View and manage all platform users</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
             <Tabs defaultValue="all">
-              <TabsList>
-                <TabsTrigger value="all">All Users ({users.length})</TabsTrigger>
-                <TabsTrigger value="sellers">Sellers ({stats.totalSellers})</TabsTrigger>
-                <TabsTrigger value="buyers">Buyers ({stats.totalBuyers})</TabsTrigger>
+              <TabsList className="w-full grid grid-cols-3 h-auto">
+                <TabsTrigger value="all" className="text-[10px] sm:text-sm py-1.5 sm:py-2">All ({users.length})</TabsTrigger>
+                <TabsTrigger value="sellers" className="text-[10px] sm:text-sm py-1.5 sm:py-2">Sellers ({stats.totalSellers})</TabsTrigger>
+                <TabsTrigger value="buyers" className="text-[10px] sm:text-sm py-1.5 sm:py-2">Buyers ({stats.totalBuyers})</TabsTrigger>
               </TabsList>
 
               {/* All Users Table */}
-              <TabsContent value="all" className="space-y-4">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Seller Info</TableHead>
-                      <TableHead>Joined</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers().map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={user.avatar_url || ""} />
-                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{user.full_name || "N/A"}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{user.email || "N/A"}</TableCell>
-                        <TableCell>{user.phone || "N/A"}</TableCell>
-                        <TableCell>{getRoleBadge(user.role)}</TableCell>
-                        <TableCell>
-                          {user.seller_info ? (
-                            <div className="space-y-1">
-                              <p className="text-sm font-medium">{user.seller_info.brand_name}</p>
-                              <p className="text-xs text-muted-foreground">{user.seller_info.business_name}</p>
-                              <div className="flex gap-2">
-                                <Badge variant={user.seller_info.is_active ? "default" : "secondary"} className="text-xs">
-                                  {user.seller_info.is_active ? "Active" : "Inactive"}
-                                </Badge>
-                                <span className="text-xs">₦{user.seller_info.total_sales?.toLocaleString() || 0}</span>
+              <TabsContent value="all" className="space-y-4 mt-4">
+                <div className="overflow-x-auto -mx-3 sm:mx-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs sm:text-sm">User</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden md:table-cell">Email</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden lg:table-cell">Phone</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Role</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Joined</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers().map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="py-2 sm:py-4">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                                <AvatarImage src={user.avatar_url || ""} />
+                                <AvatarFallback className="text-[10px] sm:text-xs">{getUserInitials(user.full_name)}</AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <span className="font-medium text-xs sm:text-sm block truncate max-w-[100px] sm:max-w-none">{user.full_name || "N/A"}</span>
+                                <span className="text-[10px] text-muted-foreground md:hidden truncate block max-w-[100px]">{user.email || ""}</span>
                               </div>
                             </div>
-                          ) : (
-                            <span className="text-muted-foreground">-</span>
-                          )}
-                        </TableCell>
-                        <TableCell>{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell text-xs sm:text-sm">{user.email || "N/A"}</TableCell>
+                          <TableCell className="hidden lg:table-cell text-xs sm:text-sm">{user.phone || "N/A"}</TableCell>
+                          <TableCell>{getRoleBadge(user.role)}</TableCell>
+                          <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </TabsContent>
 
               {/* Sellers Table */}
-              <TabsContent value="sellers" className="space-y-4">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Business</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Sales</TableHead>
-                      <TableHead>Followers</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers("sellers").map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={user.avatar_url || ""} />
-                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{user.full_name || "N/A"}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{user.email || "N/A"}</TableCell>
-                        <TableCell>
-                          <div>
-                            <p className="font-medium">{user.seller_info?.brand_name}</p>
-                            <p className="text-xs text-muted-foreground">{user.seller_info?.business_name}</p>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={user.seller_info?.is_active ? "default" : "secondary"}>
-                            {user.seller_info?.is_active ? "Active" : "Inactive"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>₦{user.seller_info?.total_sales?.toLocaleString() || 0}</TableCell>
-                        <TableCell>{user.seller_info?.follower_count || 0}</TableCell>
+              <TabsContent value="sellers" className="space-y-4 mt-4">
+                <div className="overflow-x-auto -mx-3 sm:mx-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs sm:text-sm">User</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden md:table-cell">Business</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Status</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Sales</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers("sellers").map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="py-2 sm:py-4">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                                <AvatarImage src={user.avatar_url || ""} />
+                                <AvatarFallback className="text-[10px] sm:text-xs">{getUserInitials(user.full_name)}</AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <span className="font-medium text-xs sm:text-sm block truncate max-w-[80px] sm:max-w-none">{user.full_name || "N/A"}</span>
+                                <span className="text-[10px] text-muted-foreground md:hidden">{user.seller_info?.brand_name}</span>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            <div>
+                              <p className="font-medium text-xs sm:text-sm">{user.seller_info?.brand_name}</p>
+                              <p className="text-[10px] sm:text-xs text-muted-foreground">{user.seller_info?.business_name}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={user.seller_info?.is_active ? "default" : "secondary"} className="text-[10px] sm:text-xs">
+                              {user.seller_info?.is_active ? "Active" : "Inactive"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs sm:text-sm">₦{user.seller_info?.total_sales?.toLocaleString() || 0}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </TabsContent>
 
               {/* Buyers Table */}
-              <TabsContent value="buyers" className="space-y-4">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>User</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Joined</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers("buyers").map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={user.avatar_url || ""} />
-                              <AvatarFallback>{getUserInitials(user.full_name)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{user.full_name || "N/A"}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{user.email || "N/A"}</TableCell>
-                        <TableCell>{user.phone || "N/A"}</TableCell>
-                        <TableCell>{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
+              <TabsContent value="buyers" className="space-y-4 mt-4">
+                <div className="overflow-x-auto -mx-3 sm:mx-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs sm:text-sm">User</TableHead>
+                        <TableHead className="text-xs sm:text-sm hidden sm:table-cell">Email</TableHead>
+                        <TableHead className="text-xs sm:text-sm">Joined</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers("buyers").map((user) => (
+                        <TableRow key={user.id}>
+                          <TableCell className="py-2 sm:py-4">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                                <AvatarImage src={user.avatar_url || ""} />
+                                <AvatarFallback className="text-[10px] sm:text-xs">{getUserInitials(user.full_name)}</AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <span className="font-medium text-xs sm:text-sm block truncate max-w-[100px] sm:max-w-none">{user.full_name || "N/A"}</span>
+                                <span className="text-[10px] text-muted-foreground sm:hidden truncate block max-w-[100px]">{user.email || ""}</span>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{user.email || "N/A"}</TableCell>
+                          <TableCell className="text-xs sm:text-sm">{user.created_at ? new Date(user.created_at).toLocaleDateString() : "N/A"}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </TabsContent>
             </Tabs>
           </CardContent>
