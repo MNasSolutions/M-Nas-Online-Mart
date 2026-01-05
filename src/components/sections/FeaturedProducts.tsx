@@ -1,9 +1,10 @@
-import { Star, ShoppingCart } from "lucide-react";
+import { Star, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useWishlist } from "@/hooks/useWishlist";
 import { products as allProducts, Product } from "@/data/products";
 
 // Featured products pulled from the global catalog to keep IDs consistent
@@ -15,6 +16,7 @@ export function FeaturedProducts() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { format } = useCurrency();
+  const { isInWishlist, toggleWishlist } = useWishlist();
 
   const handleAddToCart = (product: typeof products[0]) => {
     addToCart({
@@ -68,6 +70,17 @@ export function FeaturedProducts() {
                     </div>
                   )}
                   
+                  {/* Wishlist Button */}
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className={`h-7 w-7 sm:h-9 sm:w-9 bg-background/90 hover:bg-background ${isInWishlist(product.id) ? 'text-red-500' : 'text-foreground'}`}
+                      onClick={() => toggleWishlist(product.id, product.name)}
+                    >
+                      <Heart className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+                    </Button>
+                  </div>
                   
                   {/* Action Buttons - Hidden on mobile, shown on hover for desktop */}
                   <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">

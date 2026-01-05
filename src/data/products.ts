@@ -589,3 +589,7 @@ export const searchProducts = (query: string) => {
     product.category.toLowerCase().includes(query.toLowerCase())
   );
 };
+
+export const getProductById = (id: number): Product | undefined => {
+  return products.find(product => product.id === id);
+};

@@ -20,7 +20,7 @@ export default function Checkout() {
   const { cart, cartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"bank_transfer" | "paystack">("paystack");
+  const [paymentMethod, setPaymentMethod] = useState<"paystack">("paystack");
   const [formData, setFormData] = useState({
     // Customer Info
     firstName: "",
@@ -390,72 +390,11 @@ export default function Checkout() {
                   Payment Method
                 </h2>
 
-                {/* Payment Method Selection */}
-                <div className="mb-6 space-y-4">
-                  <Label>Select Payment Method</Label>
-                  <Select value={paymentMethod} onValueChange={(value: any) => setPaymentMethod(value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="paystack">Pay with Paystack (Card/Bank)</SelectItem>
-                      <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {paymentMethod === "bank_transfer" && (
-                  <>
-                    {/* Bank Transfer Options */}
-                    <div className="mb-6 space-y-4">
-                      <h3 className="text-lg font-medium">Bank Transfer Details</h3>
-                  
-                  {/* Moniepoint Details */}
-                  <div className="bg-muted p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-primary">Moniepoint Microfinance Bank</h4>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Account Name:</span>
-                        <span className="font-medium">Muhammad Ahmad Saad</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Account Number:</span>
-                        <span className="font-medium">7069036157</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Opay Details */}
-                  <div className="bg-muted p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-primary">Opay</h4>
-                    <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Account Name:</span>
-                        <span className="font-medium">Abubakar Ahmad Saad</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Account Number:</span>
-                        <span className="font-medium">7069036157</span>
-                      </div>
-                    </div>
-                  </div>
-
-                      <Alert>
-                        <AlertDescription>
-                          After making payment, please confirm via WhatsApp and provide your transaction receipt.
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                  </>
-                )}
-
-                {paymentMethod === "paystack" && (
-                  <Alert>
-                    <AlertDescription>
-                      You will be redirected to Paystack secure payment page to complete your payment.
-                    </AlertDescription>
-                  </Alert>
-                )}
+                <Alert>
+                  <AlertDescription>
+                    You will be redirected to Paystack secure payment page to complete your payment with card, bank transfer, or USSD.
+                  </AlertDescription>
+                </Alert>
 
                 <Alert className="mt-4">
                   <Lock className="h-4 w-4" />
