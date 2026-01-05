@@ -6,11 +6,13 @@ import { Footer } from "@/components/layout/Footer";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Cart() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { cart, updateQuantity, removeFromCart, cartTotal } = useCart();
+  const { format } = useCurrency();
 
   const handleUpdateQuantity = (id: number, newQuantity: number) => {
     if (newQuantity === 0) {
@@ -104,7 +106,7 @@ export default function Cart() {
                     {/* Product Info */}
                     <div className="flex-1 space-y-2">
                       <h3 className="font-semibold text-lg">{item.name}</h3>
-                      <p className="text-xl font-bold text-price">${item.price.toFixed(2)}</p>
+                      <p className="text-xl font-bold text-price">{format(item.price)}</p>
                     </div>
 
                     {/* Quantity Controls */}
@@ -155,7 +157,7 @@ export default function Cart() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium">{format(subtotal)}</span>
                 </div>
                 
                 <div className="flex justify-between">
@@ -164,26 +166,26 @@ export default function Cart() {
                     {shipping === 0 ? (
                       <span className="text-success">Free</span>
                     ) : (
-                      `$${shipping.toFixed(2)}`
+                      format(shipping)
                     )}
                   </span>
                 </div>
                 
                 <div className="flex justify-between">
                   <span>Tax</span>
-                  <span className="font-medium">${tax.toFixed(2)}</span>
+                  <span className="font-medium">{format(tax)}</span>
                 </div>
                 
                 <Separator />
                 
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-price">${total.toFixed(2)}</span>
+                  <span className="text-price">{format(total)}</span>
                 </div>
 
                 {shipping > 0 && (
                   <p className="text-sm text-muted-foreground">
-                    Add ${(100 - subtotal).toFixed(2)} more for free shipping
+                    Add {format(100 - subtotal)} more for free shipping
                   </p>
                 )}
               </div>

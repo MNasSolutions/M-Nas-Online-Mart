@@ -530,7 +530,7 @@ export default function Checkout() {
                 <Separator />
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
-                  <span className="text-price">${total.toFixed(2)}</span>
+                  <span className="text-price">{format(total)}</span>
                 </div>
               </div>
 
