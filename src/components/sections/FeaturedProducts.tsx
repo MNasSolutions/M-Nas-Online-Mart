@@ -1,4 +1,4 @@
-import { Star, Heart, ShoppingCart } from "lucide-react";
+import { Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,12 +33,6 @@ export function FeaturedProducts() {
     navigate(`/product/${product.id}`);
   };
 
-  const handleWishlist = (productName: string) => {
-    toast({
-      title: "Added to Wishlist",
-      description: `${productName} has been added to your wishlist.`,
-    });
-  };
   return (
     <section className="py-12 sm:py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -74,17 +68,6 @@ export function FeaturedProducts() {
                     </div>
                   )}
                   
-                  {/* Wishlist Button - Always visible on mobile */}
-                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="h-7 w-7 sm:h-9 sm:w-9 bg-white/90 hover:bg-white"
-                      onClick={() => handleWishlist(product.name)}
-                    >
-                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    </Button>
-                  </div>
                   
                   {/* Action Buttons - Hidden on mobile, shown on hover for desktop */}
                   <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">
