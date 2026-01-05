@@ -181,9 +181,6 @@ export function Header() {
             
             {/* Currency selector */}
             <CurrencySwitcher />
-            <Button variant="ghost" size="icon" className="relative hidden sm:flex">
-              <Heart className="h-5 w-5" />
-            </Button>
             <Link to="/cart">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
@@ -217,12 +214,6 @@ export function Header() {
                     <Link to="/track-order" className="cursor-pointer">
                       <ShoppingCart className="h-4 w-4 mr-2" />
                       Track Order
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/account/wishlist" className="cursor-pointer">
-                      <Heart className="h-4 w-4 mr-2" />
-                      Wishlist
                     </Link>
                   </DropdownMenuItem>
                   {isAdmin && (

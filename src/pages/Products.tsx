@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Star, Heart, ShoppingCart } from "lucide-react";
+import { Star, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -78,12 +78,6 @@ export default function Products() {
     navigate(`/product/${product.id}`);
   };
 
-  const handleWishlist = (product: Product) => {
-    toast({
-      title: "Added to Wishlist",
-      description: `${product.name} has been added to your wishlist.`,
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -143,17 +137,6 @@ export default function Products() {
                     </div>
                   )}
                   
-                  {/* Wishlist Button - Always visible on mobile */}
-                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
-                    <Button 
-                      size="icon" 
-                      variant="ghost" 
-                      className="h-7 w-7 sm:h-9 sm:w-9 bg-white/90 hover:bg-white"
-                      onClick={() => handleWishlist(product)}
-                    >
-                      <Heart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    </Button>
-                  </div>
                   
                   {/* Action Buttons - Hidden on mobile */}
                   <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden sm:flex gap-2">
