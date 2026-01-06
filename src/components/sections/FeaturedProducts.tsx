@@ -95,7 +95,7 @@ export function FeaturedProducts() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="flex-1 bg-white/90 hover:bg-white"
+                      className="flex-1 bg-background/90 hover:bg-background text-foreground border-border"
                       onClick={() => handleAddToCart(product)}
                     >
                       <ShoppingCart className="h-4 w-4 mr-1" />
