@@ -58,6 +58,7 @@ const App = () => (
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/order-confirmation" element={<OrderConfirmation />} />
                   <Route path="/account/wishlist" element={<Wishlist />} />
+                  <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/track-order" element={<TrackOrder />} />
                   <Route path="/account/orders" element={<TrackOrder />} />
