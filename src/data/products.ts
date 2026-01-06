@@ -11,6 +11,12 @@ import shada2 from "@/assets/750K.jpg";
 import shada3 from "@/assets/750 K.jpg";
 import shada4 from "@/assets/7.jpg";
 import shada5 from "@/assets/750H.jpg";
+import lace1 from "@/assets/550K.jpg";
+import lace2 from "@/assets/550.K.jpg";
+import lace3 from "@/assets/550..K.jpg";
+import lace4 from "@/assets/550,,.jpg";
+import lace5 from "@/assets/550'K.jpg";
+
 
 export interface Product {
   id: number;
@@ -153,16 +159,23 @@ export const products: Product[] = [
   // Fashion
   {
     id: 11,
-    name: "Premium Leather Bag",
-    price: 149.99,
-    originalPrice: 219.99,
+    name: "MEN LACES",
+    price: 0.39,
+    originalPrice: 0.46,
     rating: 4.7,
     reviews: 234,
-    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
+    image: lace1,
+    images: [
+      lace1,
+      lace2,
+      lace3,
+      lace4,
+      lace5
+    ],
     badge: "Sale",
     badgeColor: "bg-secondary",
     category: "fashion",
-    description: "Genuine leather handbag with multiple compartments"
+    description: "High Quality"
   },
   {
     id: 12,
