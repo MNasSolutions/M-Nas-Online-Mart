@@ -9,7 +9,7 @@ import power4 from "@/assets/power4.jpg";
 import shada1 from "@/assets/750.K.jpg";
 import shada2 from "@/assets/750K.jpg";
 import shada3 from "@/assets/750 K.jpg";
-
+import shada4 from "@/assets/7.jpg";
 
 export interface Product {
   id: number;
@@ -184,7 +184,8 @@ export const products: Product[] = [
      images: [
       shada1,
       shada2,
-      shada3
+      shada3,
+      shada4
     ],
     category: "fashion",
     description: "100% cotton comfortable casual t-shirt"
