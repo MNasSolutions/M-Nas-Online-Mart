@@ -180,10 +180,10 @@ export const products: Product[] = [
     rating: 4.5,
     reviews: 289,
     image: shada1,
-    [
+    images: [
       shada1,
       sahda2,
-      shada3,
+      shada3
     ],
     category: "fashion",
     description: "100% cotton comfortable casual t-shirt"
