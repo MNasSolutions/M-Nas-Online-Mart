@@ -6,9 +6,6 @@ import mypowerbank from "@/assets/powerbank.jpg";
 import power2 from "@/assets/power2.jpg";
 import power3 from "@/assets/power3.jpg";
 import power4 from "@/assets/power4.jpg";
-import shada1 from "@/assets/750K.jpg";
-
-
 
 export interface Product {
   id: number;
