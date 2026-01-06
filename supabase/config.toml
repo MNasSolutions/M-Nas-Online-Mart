@@ -3,6 +3,9 @@ project_id = "qtzlturyendzmirvbofu"
 [functions.send-status-notification]
 verify_jwt = false
 
+[functions.send-contact-message]
+verify_jwt = false
+
 [functions.chat]
 verify_jwt = true
 
