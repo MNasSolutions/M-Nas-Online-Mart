@@ -7,7 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, MessageCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Contact() {
   const [name, setName] = useState("");
@@ -20,17 +21,42 @@ export default function Contact() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate sending message
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-message', {
+        body: { name, email, message },
       });
+
+      if (error) throw error;
+
+      toast({
+        title: "Message sent! ✅",
+        description: "We'll get back to you as soon as possible. Check your email for confirmation.",
+      });
+
+      // Open WhatsApp with the message (optional - for direct contact)
+      if (data?.whatsappLink) {
+        window.open(data.whatsappLink, '_blank');
+      }
+
       setName("");
       setEmail("");
       setMessage("");
+    } catch (error: any) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Failed to send message",
+        description: error.message || "Please try again or contact us directly via WhatsApp.",
+        variant: "destructive"
+      });
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  const openWhatsApp = () => {
+    const whatsappNumber = "2347069036157";
+    const defaultMessage = "Hello! I have a question about M Nas Online Mart.";
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`, '_blank');
   };
 
   return (
@@ -104,7 +130,16 @@ export default function Contact() {
                     <Phone className="h-6 w-6 text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold mb-2">WhatsApp</h3>
-                      <p className="text-sm text-muted-foreground">Available for order notifications</p>
+                      <p className="text-sm text-muted-foreground mb-3">+234 706 903 6157</p>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={openWhatsApp}
+                        className="flex items-center gap-2"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        Chat on WhatsApp
+                      </Button>
                     </div>
                   </div>
                 </CardContent>
