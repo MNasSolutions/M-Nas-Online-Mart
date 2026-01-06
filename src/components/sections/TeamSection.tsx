@@ -13,7 +13,6 @@ const teamMembers = [
     image: me,
     bio: "Leading with vision and passion for e-commerce innovation",
     email: "mnasonlinemart@gmail.com",
-    webisite: "https://mnassolutions.vercel.app/",
     linkedin: "https://www.linkedin.com/in/mnassolutions/",
     twitter: "https://x.com/Muhamma25772152"
   },
