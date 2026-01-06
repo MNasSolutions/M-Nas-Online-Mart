@@ -6,6 +6,11 @@ import mypowerbank from "@/assets/powerbank.jpg";
 import power2 from "@/assets/power2.jpg";
 import power3 from "@/assets/power3.jpg";
 import power4 from "@/assets/power4.jpg";
+import shada1 from "@/assets/750K.jpg";
+import shada2 from "@/assets/750 K.jpg";
+import shada3 from "@/assets/750,K.jpg";
+import shada4 from "@/assets/750'K.jpg";
+
 
 export interface Product {
   id: number;
@@ -171,12 +176,18 @@ export const products: Product[] = [
   },
   {
     id: 13,
-    name: "Casual T-Shirt",
-    price: 29.99,
-    originalPrice: 39.99,
+    name: "MEN LACE",
+    price: 0.49,
+    originalPrice: 0.56,
     rating: 4.5,
     reviews: 289,
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80",
+    image: shada,
+    images: [
+      shada1,
+      shad2,
+      shada3,
+      shada,
+    ],
     category: "fashion",
     description: "100% cotton comfortable casual t-shirt"
   },
