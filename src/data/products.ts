@@ -6,6 +6,9 @@ import mypowerbank from "@/assets/powerbank.jpg";
 import power2 from "@/assets/power2.jpg";
 import power3 from "@/assets/power3.jpg";
 import power4 from "@/assets/power4.jpg";
+import shada1 from "@/assets/750.K.jpg";
+import shada2 from "@/assets/750K.jpg";
+
 
 export interface Product {
   id: number;
@@ -177,6 +180,10 @@ export const products: Product[] = [
     rating: 4.5,
     reviews: 289,
     image: shada1,
+    [
+      shada1,
+      sahda2
+    ],
     category: "fashion",
     description: "100% cotton comfortable casual t-shirt"
   },
