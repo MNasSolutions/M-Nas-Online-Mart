@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { Analytics } from "@vercel/analytics/react";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -81,6 +82,7 @@ const App = () => (
                 </Routes>
                 <CookieConsent />
               </BrowserRouter>
+              <Analytics />
             </TooltipProvider>
           </CurrencyProvider>
         </CartProvider>
