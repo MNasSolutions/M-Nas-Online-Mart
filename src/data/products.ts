@@ -186,7 +186,7 @@ export const products: Product[] = [
       shada1,
       shad2,
       shada3,
-      shada,
+      shada
     ],
     category: "fashion",
     description: "100% cotton comfortable casual t-shirt"
