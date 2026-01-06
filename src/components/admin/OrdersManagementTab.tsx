@@ -51,12 +51,35 @@ export default function OrdersManagementTab() {
 
   const updateOrderStatus = async (orderId: string, newStatus: "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled") => {
     try {
+      // Find the order to get customer details
+      const order = orders.find(o => o.id === orderId);
+      if (!order) throw new Error("Order not found");
+
       const { error } = await supabase
         .from('orders')
         .update({ order_status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', orderId);
 
       if (error) throw error;
+      
+      // Send status notification email
+      try {
+        const { data: session } = await supabase.auth.getSession();
+        await supabase.functions.invoke('send-status-notification', {
+          body: {
+            orderNumber: order.order_number,
+            customerName: order.customer_name,
+            customerEmail: order.customer_email,
+            customerPhone: order.customer_phone,
+            newStatus: newStatus,
+            shippingAddress: order.shipping_address,
+          },
+        });
+        console.log("Status notification sent");
+      } catch (notifError) {
+        console.error("Failed to send notification:", notifError);
+        // Don't fail the status update if notification fails
+      }
       
       toast.success(`Order status updated to ${newStatus}`);
       loadOrders();
