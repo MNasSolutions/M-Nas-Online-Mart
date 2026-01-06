@@ -7,9 +7,7 @@ import power2 from "@/assets/power2.jpg";
 import power3 from "@/assets/power3.jpg";
 import power4 from "@/assets/power4.jpg";
 import shada1 from "@/assets/750K.jpg";
-import shada2 from "@/assets/750 K.jpg";
-import shada3 from "@/assets/750,K.jpg";
-import shada4 from "@/assets/750'K.jpg";
+
 
 
 export interface Product {
@@ -181,7 +179,7 @@ export const products: Product[] = [
     originalPrice: 0.56,
     rating: 4.5,
     reviews: 289,
-    image: shada,
+    image: shada1,
     images: [
       shada1,
       shad2,
