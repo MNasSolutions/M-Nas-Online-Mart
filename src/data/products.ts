@@ -175,7 +175,7 @@ export const products: Product[] = [
     badge: "Sale",
     badgeColor: "bg-secondary",
     category: "fashion",
-    description: "High Quality"
+    description: "Herbert pircher Austria 🇦🇹 Men lace 550k— 10 yards 275k — 5 yards"
   },
   {
     id: 12,
