@@ -160,8 +160,8 @@ export const products: Product[] = [
   {
     id: 11,
     name: "MEN LACES",
-    price: 4539.1,
-    originalPrice: 5237.43,
+    price: 453.91,
+    originalPrice: 523.74,
     rating: 4.7,
     reviews: 234,
     image: lace1,
@@ -190,8 +190,8 @@ export const products: Product[] = [
   {
     id: 13,
     name: "MEN LACE",
-    price: 5237.43,
-    originalPrice: 5935.75,
+    price: 523.74,
+    originalPrice: 593.58,
     rating: 4.5,
     reviews: 289,
     image: shada1,
