@@ -159,7 +159,7 @@ export const products: Product[] = [
   // Fashion
   {
     id: 11,
-    name: "MEN LACES",
+    name: "Herbert pircher Austria 🇦🇹 Men lace",
     price: 386.00,
     originalPrice: 456.19,
     rating: 4.7,
