@@ -11,6 +11,9 @@ import { Users, UserCheck, Store, ShoppingCart, DollarSign, TrendingUp, Wallet }
 import { toast } from "sonner";
 import AdminLayout from "@/components/admin/AdminLayout";
 import EnhancedPayoutsTab from "@/components/admin/EnhancedPayoutsTab";
+import { RealTimeStatsWidget } from "@/components/admin/RealTimeStatsWidget";
+import { ExportButtons } from "@/components/admin/ExportButtons";
+import { AdminNotificationsCenter } from "@/components/admin/AdminNotificationsCenter";
 
 interface UserProfile {
   id: string;
@@ -186,12 +189,19 @@ export default function NewAdminDashboard() {
   return (
     <AdminLayout>
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-sm text-muted-foreground">Platform overview and management</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">Dashboard</h1>
+            <p className="text-sm text-muted-foreground">Platform overview and management</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <AdminNotificationsCenter />
+            <ExportButtons />
+          </div>
         </div>
 
-        {/* Stats Grid */}
+        {/* Real-Time Stats Widget */}
+        <RealTimeStatsWidget />
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
           {/* Registered Accounts */}
           <Card className="col-span-2 sm:col-span-1">
